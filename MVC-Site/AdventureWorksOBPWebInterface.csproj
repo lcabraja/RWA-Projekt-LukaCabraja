@@ -203,6 +203,7 @@
     <Content Include="Views\Proizvod\Create.cshtml" />
     <Content Include="Views\Proizvod\Edit.cshtml" />
     <Content Include="Views\Proizvod\Delete.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

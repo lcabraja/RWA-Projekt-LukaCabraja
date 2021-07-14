@@ -4,4 +4,34 @@
 }
 
 <h2>Index</h2>
+<div class="container">
+    <div class="container m-auto mt-4">
+        <div class="container mt-5" id="formcontainer">
+            <style>
+                #formcontainer > .input-group {
+                    margin-right: 0px;
+                }
 
+                    #formcontainer > .input-group > .form-control {
+                        margin-right: 1px;
+                    }
+            </style>
+            <form>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Username</span>
+                    <input class="form-control" name="username" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Password</span>
+                    <input class="form-control" type="password" name="password"/>
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <input type="submit" class="btn btn-outline-success ms-1" />
+                </div>
+            </form>
+            <div>
+                <span class="badge badge-danger">@ViewBag.ErrorMessage</span>
+            </div>
+        </div>
+    </div>
+</div>

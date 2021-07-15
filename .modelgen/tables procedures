@@ -1,0 +1,65 @@
+R Drzava
+IDDrzava
+Naziv
+
+R Grad
+IDGrad
+Naziv
+DrzavaID
+
+CRUD Kategorija
+IDKategorija
+Naziv
+
+R Komercijalist
+IDKomercijalist
+Ime
+Prezime
+StalniZaposlenik
+
+R KreditnaKartica
+IDKreditnaKartica
+Tip
+Broj
+IstekMjesec
+IstekGodina
+
+RU Kupac
+IDKupac
+Ime
+Prezime
+Email
+Telefon
+GradID
+
+CRUD Potkategorija
+IDPotkategorija
+KategorijaID
+Naziv
+
+CRUD Proizvod
+IDProizvod
+Naziv
+BrojProizvoda
+Boja
+MinimalnaKolicinaNaSkladistu
+CijenaBezPDV
+PotkategorijaID
+
+R Racun
+IDRacun
+DatumIzdavanja
+BrojRacuna
+KupacID
+KomercijalistID
+KreditnaKarticaID
+Komentar
+
+R Stavka
+IDStavka
+RacunID
+Kolicina
+ProizvodID
+CijenaPoKomadu
+PopustUPostocima
+UkupnaCijena

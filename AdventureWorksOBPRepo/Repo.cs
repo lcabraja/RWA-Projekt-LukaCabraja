@@ -128,16 +128,16 @@ namespace AdventureWorksOBPRepo
             if (cacheGrad.Count == 0 && !recacheGrad)
             {
                 SortedList<int, Grad> collection = new SortedList<int, Grad>();
-                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad");
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad_targeted", drzavaID);
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     var Grad = GetGradFromDataRow(row);
                     collection[Grad.IDGrad] = Grad;
                 }
-                cacheGrad = collection;
+                collection.Values.ToList().ForEach(Cache);
                 recacheGrad = false;
+                return collection;
             }
-
             return cacheGrad.Where(x => x.Value.Drzava.IDDrzava == drzavaID)
                             .Aggregate(new SortedList<int, Grad>(), (x, y) => { x[y.Key] = y.Value; return x; }, (x) => { return x; });
         }
@@ -209,9 +209,22 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Komercijalist----------------------------------
-        public Komercijalist GetKomercijalist(int idKomercijalist) =>
-            cacheKomercijalist?[idKomercijalist] ?? null;
+        //--------------------------------------------------------------------------------------------------------------------- ----------------------------------
+        public Komercijalist GetKomercijalist(int idKomercijalist)
+        {
+            Komercijalist Komercijalist;
+            if (cacheKomercijalist.TryGetValue(idKomercijalist, out Komercijalist))
+            {
+                return Komercijalist;
+            }
+            else
+            {
+                Komercijalist = GetKomercijalistFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Komercijalist", idKomercijalist).Tables[0].Rows[0]);
+                Cache(Komercijalist);
+                return Komercijalist;
+            }
+        }
         public SortedList<int, Komercijalist> GetMultipleKomercijalist()
         {
             if (cacheKomercijalist.Count == 0 && !recacheKomercijalist)
@@ -304,7 +317,7 @@ namespace AdventureWorksOBPRepo
                 IDKreditnaKartica = (int)row["IDKreditnaKartica"],
                 Broj = row["Broj"].ToString(),
                 IstekGodina = (short)row["IstekGodina"],
-                IstekMjesec = (short)row["IstekGodina"],
+                IstekMjesec = short.Parse(row["IstekMjesec"].ToString()),
                 Tip = DetermineTipKreditnaKartica(row["Tip"].ToString())
 
             };
@@ -341,14 +354,15 @@ namespace AdventureWorksOBPRepo
                 return kupac;
             }
         }
-        public SortedList<int, Kupac> GetMultipleKupac(uint count, uint skip = 0, KupacOrderBy order = KupacOrderBy.IDKupacAsc)
+        public SortedList<int, Kupac> GetMultipleKupac(uint take, uint skip = 0, KupacOrderBy order = KupacOrderBy.IDKupacAsc)
         {
-            count = MaxCount(count);
+            take = MaxCount(take);
             if (cacheKupac.Count == 0 && !recacheKupac)
             {
                 SortedList<int, Kupac> collection = new SortedList<int, Kupac>();
-                Debug.Assert(KupacOrderBy.IDKupacAsc.ToString() != "IDKupacAsc", KupacOrderBy.IDKupacAsc.ToString());
-                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kupac", order.ToString(), (int)skip, (int)count);
+                //Debug.Assert(KupacOrderBy.IDKupacAsc.ToString() != "IDKupacAsc", KupacOrderBy.IDKupacAsc.ToString());
+                var kupac = KupacOrderBy.IDKupacAsc.ToString();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kupac", order.ToString(), (int)skip, (int)take);
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     var Kupac = GetKupacFromDataRow(row);
@@ -356,9 +370,9 @@ namespace AdventureWorksOBPRepo
                 }
                 cacheKupac = collection;
                 recacheKupac = false;
+                return collection;
             }
-            int skipcount = 1;
-            return Aggregate<Kupac>(cacheKupac.TakeWhile(x => skip > skipcount++ && count < skipcount));
+            return Aggregate<Kupac>(cacheKupac.Skip((int)skip).Take((int)take));
         }
         public int UpdateKupac(Kupac Kupac)
         {

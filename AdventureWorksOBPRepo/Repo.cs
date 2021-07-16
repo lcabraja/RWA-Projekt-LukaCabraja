@@ -11,8 +11,9 @@ namespace AdventureWorksOBPRepo
 {
     public class Repo
     {
-        public string ConnectionString { get; private set; }
+        public const int MAXTAKE = 50;
 
+        public string ConnectionString { get; private set; }
         public Repo(string connectionString)
         {
             ConnectionString = connectionString;
@@ -324,7 +325,7 @@ namespace AdventureWorksOBPRepo
                     return TipKreditnaKartica.Other;
             }
         }
-        //-------------------------------------------------------------------------------------Kupac---------------------------------------------- ENUM
+        //-------------------------------------------------------------------------------------Kupac---------------------------------------------- ORDER BY ENUM
         public Kupac GetKupac(int idKupac)
         {
             Kupac kupac;
@@ -374,7 +375,7 @@ namespace AdventureWorksOBPRepo
         //-------------------------------------------------------------------------------------Helper----------------------------------------------
         private uint MaxCount(uint currentCount)
         {
-            return currentCount > 50 ? 50 : currentCount;
+            return currentCount > MAXTAKE ? MAXTAKE: currentCount;
         }
         private SortedList<int, T> Aggregate<T>(IEnumerable<KeyValuePair<int, T>> enumerable)
         {

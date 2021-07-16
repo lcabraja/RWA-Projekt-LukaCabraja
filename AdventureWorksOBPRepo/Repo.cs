@@ -67,7 +67,7 @@ namespace AdventureWorksOBPRepo
         // R Racun
         // R Stavka
 
-        //-------------------------------------------------------------------------------------Drzava----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Drzava-----------------------------------------
         public Drzava GetDrzava(int IDDrzava)
         {
             if (cacheDrzava.ContainsKey(IDDrzava))
@@ -104,7 +104,7 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //-------------------------------------------------------------------------------------Grad----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Grad-------------------------------------------
         public Grad GetGrad(int IDGrad) =>
             cacheGrad?[IDGrad] ?? null;
         public SortedList<int, Grad> GetMultipleGrad()
@@ -150,7 +150,7 @@ namespace AdventureWorksOBPRepo
                 Drzava = GetDrzava((int)row["DrzavaID"])
             };
         }
-        //-------------------------------------------------------------------------------------Kategorija----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Kategorija-------------------------------------
         public int CreateKategorija(Kategorija kategorija)
         {
             int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Kategorija", kategorija.Naziv.Substring(0, 50)).ToString());
@@ -209,7 +209,7 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //-------------------------------------------------------------------------------------Komercijalist----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Komercijalist----------------------------------
         public Komercijalist GetKomercijalist(int idKomercijalist) =>
             cacheKomercijalist?[idKomercijalist] ?? null;
         public SortedList<int, Komercijalist> GetMultipleKomercijalist()
@@ -238,7 +238,7 @@ namespace AdventureWorksOBPRepo
                 StalniZaposlenik = (bool)row["StalniZaposlenik"]
             };
         }
-        //-------------------------------------------------------------------------------------KreditnaKartica----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------KreditnaKartica--------------------------------
         public KreditnaKartica GetKreditnaKarticaBroj(string brojKartice)
         {
             IEqualityComparer<KreditnaKartica> comparer = new KreditnaKarticaComparer();
@@ -325,7 +325,7 @@ namespace AdventureWorksOBPRepo
                     return TipKreditnaKartica.Other;
             }
         }
-        //-------------------------------------------------------------------------------------Kupac---------------------------------------------- ORDER BY ENUM
+        //---------------------------------------------------------------------------------------------------------------------Kupac------------------------------------------
         public Kupac GetKupac(int idKupac)
         {
             Kupac kupac;
@@ -392,7 +392,7 @@ namespace AdventureWorksOBPRepo
                 Grad = GetGrad((int)row["GradID"])
             };
         }
-        //-------------------------------------------------------------------------------------Potkategorija----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Potkategorija----------------------------------
         public int CreatePotkategorija(Potkategorija potkategorija)
         {
             int IDPotkategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Potkategorija", potkategorija.Naziv.Substring(0, 50)).ToString());
@@ -465,7 +465,7 @@ namespace AdventureWorksOBPRepo
                 Kategorija = GetKategorija((int)row["KategorijaID"])
             };
         }
-        //-------------------------------------------------------------------------------------Proizvod----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Proizvod---------------------------------------
         public int CreateProizvod(Proizvod Proizvod)
         {
             int IDProizvod = int.Parse(SqlHelper.ExecuteScalar(
@@ -501,12 +501,12 @@ namespace AdventureWorksOBPRepo
                 return Proizvod;
             }
         }
-        public SortedList<int, Proizvod> GetMultipleProizvod()
+        public SortedList<int, Proizvod> GetMultipleProizvod(uint count, uint skip = 0)
         {
             if (cacheProizvod.Count == 0 && !recacheProizvod)
             {
                 SortedList<int, Proizvod> collection = new SortedList<int, Proizvod>();
-                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Proizvod");
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Proizvod", (int)count, (int)skip);
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     var Proizvod = GetProizvodFromDataRow(row);
@@ -524,7 +524,11 @@ namespace AdventureWorksOBPRepo
                     "proc_update_Proizvod",
                     Proizvod.IDProizvod,
                     Proizvod.Naziv.Substring(0, 50),
-                    Proizvod.Proizvod.IDProizvod
+                    Proizvod.MinimalnaKolicinaNaSkladistu,
+                    Proizvod.BrojProizvoda,
+                    Proizvod.Boja.ToString(),
+                    Proizvod.CijenaBezPDV,
+                    Proizvod.Potkategorija.IDPotkategorija
                 );
             if (rows > 0)
             {
@@ -555,11 +559,110 @@ namespace AdventureWorksOBPRepo
         {
             switch (stringtip)
             {
-                case "Bijela":                     return Boja.Bijela;                case "Crna":                     return Boja.Crna;                case "Crvena":                     return Boja.Crvena;                case "Plava":                     return Boja.Plava;                case "Siva":                     return Boja.Siva;                case "Srebena":                     return Boja.Srebrna;                case "Srebrna/Crna":                     return Boja.SrebrnaCrna;                case "Šarena":                     return Boja.Sarena;                case "Žuta":                     return Boja.Zuta;                default:
+                case "Bijela":
+                    return Boja.Bijela;                case "Crna":
+                    return Boja.Crna;                case "Crvena":
+                    return Boja.Crvena;                case "Plava":
+                    return Boja.Plava;                case "Siva":
+                    return Boja.Siva;                case "Srebena":
+                    return Boja.Srebrna;                case "Srebrna/Crna":
+                    return Boja.SrebrnaCrna;                case "Šarena":
+                    return Boja.Sarena;                case "Žuta":
+                    return Boja.Zuta;                default:
                     return Boja.NoColor;
             }
         }
-        //-------------------------------------------------------------------------------------Helper----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Racun------------------------------------------
+        public Racun GetRacun(int idRacun)
+        {
+            Racun Racun;
+            if (cacheRacun.TryGetValue(idRacun, out Racun))
+            {
+                return Racun;
+            }
+            else
+            {
+                Racun = GetRacunFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Racun", idRacun).Tables[0].Rows[0]);
+                Cache(Racun);
+                return Racun;
+            }
+        }
+        public SortedList<int, Racun> GetMultipleRacun()
+        {
+            if (cacheRacun.Count == 0 && !recacheRacun)
+            {
+                SortedList<int, Racun> collection = new SortedList<int, Racun>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Racun");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Racun = GetRacunFromDataRow(row);
+                    collection[Racun.IDRacun] = Racun;
+                }
+                cacheRacun = collection;
+                recacheRacun = false;
+            }
+            return cacheRacun;
+        }
+        private Racun GetRacunFromDataRow(DataRow row)
+        {
+            return new Racun
+            {
+                IDRacun = (int)row["IDRacun"],
+                BrojRacuna = row["BrojRacuna"].ToString(),
+                DatumIzdavanja = (DateTime)row["DatumIzdavanja"],
+                Komentar = row["Komentar"].ToString(),
+                Komercijalist = GetKomercijalist((int)row["KomercijalistID"]),
+                KreditnaKartica = GetKreditnaKarticaID((int)row["KreditnaKarticaID"]),
+                Kupac = GetKupac((int)row["KupacID"])
+            };
+        }
+        //---------------------------------------------------------------------------------------------------------------------Stavka-----------------------------------------
+        public Stavka GetStavka(int idStavka)
+        {
+            Stavka Stavka;
+            if (cacheStavka.TryGetValue(idStavka, out Stavka))
+            {
+                return Stavka;
+            }
+            else
+            {
+                Stavka = GetStavkaFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Stavka", idStavka).Tables[0].Rows[0]);
+                Cache(Stavka);
+                return Stavka;
+            }
+        }
+        public SortedList<int, Stavka> GetMultipleStavka()
+        {
+            if (cacheStavka.Count == 0 && !recacheStavka)
+            {
+                SortedList<int, Stavka> collection = new SortedList<int, Stavka>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Stavka");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Stavka = GetStavkaFromDataRow(row);
+                    collection[Stavka.IDStavka] = Stavka;
+                }
+                cacheStavka = collection;
+                recacheStavka = false;
+            }
+            return cacheStavka;
+        }
+        private Stavka GetStavkaFromDataRow(DataRow row)
+        {
+            return new Stavka
+            {
+                IDStavka = (int)row["IDStavka"],
+                CijenaPoKomadu = (decimal)row["IDStavka"],
+                Kolicina = (int)row["IDStavka"],
+                PopustUPostocima = (int)row["IDStavka"],
+                Proizvod = GetProizvod((int)row["IDStavka"]),
+                Racun = GetRacun((int)row["IDStavka"]),
+                UkupnaCijena = (int)row["IDStavka"]
+            };
+        }
+        //---------------------------------------------------------------------------------------------------------------------Helper-----------------------------------------
         private uint MaxCount(uint currentCount)
         {
             return currentCount > MAXTAKE ? MAXTAKE : currentCount;
@@ -577,7 +680,7 @@ namespace AdventureWorksOBPRepo
             PrezimeAsc,
             PrezimeDesc
         }
-        //-------------------------------------------------------------------------------------Cache----------------------------------------------
+        //---------------------------------------------------------------------------------------------------------------------Cache------------------------------------------
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {
             { typeof(Drzava), 1 },

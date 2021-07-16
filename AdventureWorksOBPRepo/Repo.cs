@@ -61,7 +61,7 @@ namespace AdventureWorksOBPRepo
         // R Racun
         // R Stavka
 
-        //----------------------------------------------Drzava----------------------------------------------
+        //-------------------------------------------------------------------------------------Drzava----------------------------------------------
         public Drzava GetDrzava(int IDDrzava)
         {
             if (cacheDrzava.ContainsKey(IDDrzava))
@@ -90,7 +90,6 @@ namespace AdventureWorksOBPRepo
             }
             return cacheDrzava;
         }
-
         private Drzava GetDrzavaFromDataRow(DataRow row)
         {
             return new Drzava
@@ -99,9 +98,25 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //----------------------------------------------Grad----------------------------------------------
+        //-------------------------------------------------------------------------------------Grad----------------------------------------------
         public Grad GetGrad(int IDGrad) =>
             cacheGrad?[IDGrad] ?? null;
+        public SortedList<int, Grad> GetMultipleGrad()
+        {
+            if (cacheGrad.Count == 0 && !recacheGrad)
+            {
+                SortedList<int, Grad> collection = new SortedList<int, Grad>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Grad = GetGradFromDataRow(row);
+                    collection[Grad.IDGrad] = Grad;
+                }
+                cacheGrad = collection;
+                recacheGrad = false;
+            }
+            return cacheGrad;
+        }
         public SortedList<int, Grad> GetMultipleGrad(int drzavaID)
         {
             if (cacheGrad.Count == 0 && !recacheGrad)
@@ -120,7 +135,6 @@ namespace AdventureWorksOBPRepo
             return cacheGrad.Where(x => x.Value.Drzava.IDDrzava == drzavaID)
                             .Aggregate(new SortedList<int, Grad>(), (x, y) => { x[y.Key] = y.Value; return x; }, (x) => { return x; });
         }
-
         private Grad GetGradFromDataRow(DataRow row)
         {
             return new Grad
@@ -130,12 +144,13 @@ namespace AdventureWorksOBPRepo
                 Drzava = GetDrzava((int)row["DrzavaID"])
             };
         }
-        //----------------------------------------------Kategorija----------------------------------------------
+        //-------------------------------------------------------------------------------------Kategorija----------------------------------------------
         public int CreateKategorija(Kategorija kategorija)
         {
             int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Kategorija", kategorija.Naziv.Substring(0, 50)).ToString());
             if (IDKategorija > 0)
             {
+                kategorija.IDKategorija = IDKategorija;
                 Cache(kategorija);
                 return IDKategorija;
             }
@@ -163,7 +178,7 @@ namespace AdventureWorksOBPRepo
         {
             int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(
                     ConnectionString,
-                    "proc_create_Kategorija",
+                    "proc_update_Kategorija",
                     kategorija.IDKategorija,
                     kategorija.Naziv.Substring(0, 50)
                 ).ToString());
@@ -175,13 +190,11 @@ namespace AdventureWorksOBPRepo
             }
             return 0;
         }
-
         public void DeleteKategorija(int idKategorija)
         {
             SqlHelper.ExecuteNonQuery(ConnectionString, "proc_delete_Kategorija", idKategorija);
             cacheKategorija.Remove(idKategorija);
         }
-
         private Kategorija GetKategorijaFromDataRow(DataRow row)
         {
             return new Kategorija
@@ -190,7 +203,7 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //----------------------------------------------Komercijalist----------------------------------------------
+        //-------------------------------------------------------------------------------------Komercijalist----------------------------------------------
         public Komercijalist GetKomercijalist(int idKomercijalist) =>
             cacheKomercijalist?[idKomercijalist] ?? null;
         public SortedList<int, Komercijalist> GetMultipleKomercijalist()
@@ -219,7 +232,7 @@ namespace AdventureWorksOBPRepo
                 StalniZaposlenik = (bool)row["StalniZaposlenik"]
             };
         }
-        //----------------------------------------------KreditnaKartica----------------------------------------------
+        //-------------------------------------------------------------------------------------KreditnaKartica----------------------------------------------
         public KreditnaKartica GetKreditnaKarticaBroj(string brojKartice)
         {
             IEqualityComparer<KreditnaKartica> comparer = new KreditnaKarticaComparer();
@@ -306,8 +319,7 @@ namespace AdventureWorksOBPRepo
                     return TipKreditnaKartica.Other;
             }
         }
-
-        //----------------------------------------------Cache----------------------------------------------
+        //-------------------------------------------------------------------------------------Cache----------------------------------------------
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {
             { typeof(Drzava), 1 },
@@ -350,6 +362,25 @@ namespace AdventureWorksOBPRepo
                     return;
 
             }
+        }
+        public void CacheAll()
+        {
+            recacheDrzava = true;
+            recacheGrad = true;
+            recacheKategorija = true;
+            recacheKomercijalist = true;
+            recacheKreditnaKartica = true;
+            recacheKupac = true;
+            recachePotkategorija = true;
+            recacheProizvod = true;
+            recacheRacun = true;
+            recacheStavka = true;
+
+            GetMultipleDrzava();
+            GetMultipleGrad();
+            GetMultipleKategorija();
+            GetMultipleKomercijalist();
+            GetMultipleKreditnaKartica();
         }
     }
 }

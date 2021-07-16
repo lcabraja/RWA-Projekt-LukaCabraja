@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC-Site", "MVC-Site\MVC-Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorksOBPRepo", "AdventureWorksOBPRepo\AdventureWorksOBPRepo.csproj", "{5598CA09-AA25-4D6E-AE74-3CB34EE5B379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoTest", "RepoTest\RepoTest.csproj", "{F3C378CD-5C5E-4896-8671-5E3DBE3411DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5598CA09-AA25-4D6E-AE74-3CB34EE5B379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5598CA09-AA25-4D6E-AE74-3CB34EE5B379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5598CA09-AA25-4D6E-AE74-3CB34EE5B379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C378CD-5C5E-4896-8671-5E3DBE3411DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C378CD-5C5E-4896-8671-5E3DBE3411DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C378CD-5C5E-4896-8671-5E3DBE3411DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C378CD-5C5E-4896-8671-5E3DBE3411DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -162,9 +162,9 @@ namespace AdventureWorksOBPRepo
         public int UpdateKategorija(Kategorija kategorija)
         {
             int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(
-                    ConnectionString, 
-                    "proc_create_Kategorija", 
-                    kategorija.IDKategorija, 
+                    ConnectionString,
+                    "proc_create_Kategorija",
+                    kategorija.IDKategorija,
                     kategorija.Naziv.Substring(0, 50)
                 ).ToString());
 
@@ -219,6 +219,78 @@ namespace AdventureWorksOBPRepo
                 StalniZaposlenik = (bool)row["StalniZaposlenik"]
             };
         }
+        //----------------------------------------------KreditnaKartica----------------------------------------------
+        public KreditnaKartica GetKreditnaKarticaBroj(string brojKartice)
+        {
+            IEqualityComparer<KreditnaKartica> comparer = new KreditnaKarticaComparer();
+            if (cacheKreditnaKartica.Values.Contains(new KreditnaKartica { Broj = brojKartice }, comparer))
+            {
+                return cacheKreditnaKartica.Values.First(x => x.Broj == brojKartice);
+            }
+            else
+            {
+                KreditnaKartica kartica = GetKreditnaKarticaFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_KreditnaKartica_broj", brojKartice).Tables[0].Rows[0]);
+                Cache(kartica);
+                return kartica;
+            }
+        }
+        private class KreditnaKarticaComparer : IEqualityComparer<KreditnaKartica>
+        {
+            public bool Equals(KreditnaKartica x, KreditnaKartica y)
+            {
+                return x.Broj.Equals(y.Broj);
+            }
+
+            public int GetHashCode(KreditnaKartica obj)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public KreditnaKartica GetKreditnaKarticaID(int idKreditnaKartica)
+        {
+            KreditnaKartica kartica;
+            if (cacheKreditnaKartica.TryGetValue(idKreditnaKartica, out kartica))
+            {
+                return kartica;
+            }
+            else
+            {
+                kartica = GetKreditnaKarticaFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_KreditnaKartica_id", idKreditnaKartica).Tables[0].Rows[0]);
+                Cache(kartica);
+                return kartica;
+            }
+        }
+        private KreditnaKartica GetKreditnaKarticaFromDataRow(DataRow row)
+        {
+            return new KreditnaKartica
+            {
+                IDKreditnaKartica = (int)row["IDKreditnaKartica"],
+                Broj = row["Broj"].ToString(),
+                IstekGodina = (short)row["IstekGodina"],
+                IstekMjesec = (short)row["IstekGodina"],
+                Tip = DetermineTipKreditnaKartica(row["Tip"].ToString())
+
+            };
+        }
+        public static TipKreditnaKartica DetermineTipKreditnaKartica(string stringtip)
+        {
+            switch (stringtip)
+            {
+                case "American Express":
+                    return TipKreditnaKartica.AmericanExpress;
+                case "Diners":
+                    return TipKreditnaKartica.Diners;
+                case "MasterCard":
+                    return TipKreditnaKartica.MasterCard;
+                case "Visa":
+                    return TipKreditnaKartica.Visa;
+                default:
+                    return TipKreditnaKartica.Other;
+            }
+        }
+
         //----------------------------------------------Cache----------------------------------------------
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {

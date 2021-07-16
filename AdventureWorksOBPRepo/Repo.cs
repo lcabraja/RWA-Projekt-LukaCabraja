@@ -392,11 +392,177 @@ namespace AdventureWorksOBPRepo
                 Grad = GetGrad((int)row["GradID"])
             };
         }
-        //-------------------------------------------------------------------------------------Helper----------------------------------------------
+        //-------------------------------------------------------------------------------------Potkategorija----------------------------------------------
+        public int CreatePotkategorija(Potkategorija potkategorija)
+        {
+            int IDPotkategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Potkategorija", potkategorija.Naziv.Substring(0, 50)).ToString());
+            if (IDPotkategorija > 0)
+            {
+                potkategorija.IDPotkategorija = IDPotkategorija;
+                Cache(potkategorija);
+                return IDPotkategorija;
+            }
+            return 0;
+        }
+        public Potkategorija GetPotkategorija(int IDPotkategorija)
+        {
+            Potkategorija Potkategorija;
+            if (cachePotkategorija.TryGetValue(IDPotkategorija, out Potkategorija))
+            {
+                return Potkategorija;
+            }
+            else
+            {
+                Potkategorija = GetPotkategorijaFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Potkategorija", IDPotkategorija).Tables[0].Rows[0]);
+                Cache(Potkategorija);
+                return Potkategorija;
+            }
+        }
+        public SortedList<int, Potkategorija> GetMultiplePotkategorija()
+        {
+            if (cachePotkategorija.Count == 0 && !recachePotkategorija)
+            {
+                SortedList<int, Potkategorija> collection = new SortedList<int, Potkategorija>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Potkategorija");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Potkategorija = GetPotkategorijaFromDataRow(row);
+                    collection[Potkategorija.IDPotkategorija] = Potkategorija;
+                }
+                cachePotkategorija = collection;
+                recachePotkategorija = false;
+            }
+            return cachePotkategorija;
+        }
+        public int UpdatePotkategorija(Potkategorija potkategorija)
+        {
+            int rows = SqlHelper.ExecuteNonQuery(
+                    ConnectionString,
+                    "proc_update_Potkategorija",
+                    potkategorija.IDPotkategorija,
+                    potkategorija.Naziv.Substring(0, 50),
+                    potkategorija.Kategorija.IDKategorija
+                );
+            if (rows > 0)
+            {
+                Cache(potkategorija);
+                return rows;
+            }
+            return 0;
+        }
+        public void DeletePotkategorija(int idPotkategorija)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, "proc_delete_Potkategorija", idPotkategorija);
+            cachePotkategorija.Remove(idPotkategorija);
+        }
+        private Potkategorija GetPotkategorijaFromDataRow(DataRow row)
+        {
+            return new Potkategorija
+            {
+                IDPotkategorija = (int)row["IDPotkategorija"],
+                Naziv = row["Naziv"].ToString(),
+                Kategorija = GetKategorija((int)row["KategorijaID"])
+            };
+        }
+        //-------------------------------------------------------------------------------------Proizvod----------------------------------------------
+        public int CreateProizvod(Proizvod Proizvod)
+        {
+            int IDProizvod = int.Parse(SqlHelper.ExecuteScalar(
+                ConnectionString,
+                "proc_create_Proizvod",
+                Proizvod.Naziv.Substring(0, 50),
+                Proizvod.BrojProizvoda,
+                Proizvod.Boja.ToString(),
+                Proizvod.MinimalnaKolicinaNaSkladistu,
+                Proizvod.CijenaBezPDV,
+                Proizvod.Potkategorija.IDPotkategorija
+            ).ToString());
+            if (IDProizvod > 0)
+            {
+                Proizvod.IDProizvod = IDProizvod;
+                Cache(Proizvod);
+                return IDProizvod;
+            }
+            return 0;
+        }
+        public Proizvod GetProizvod(int IDProizvod)
+        {
+            Proizvod Proizvod;
+            if (cacheProizvod.TryGetValue(IDProizvod, out Proizvod))
+            {
+                return Proizvod;
+            }
+            else
+            {
+                Proizvod = GetProizvodFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Proizvod", IDProizvod).Tables[0].Rows[0]);
+                Cache(Proizvod);
+                return Proizvod;
+            }
+        }
+        public SortedList<int, Proizvod> GetMultipleProizvod()
+        {
+            if (cacheProizvod.Count == 0 && !recacheProizvod)
+            {
+                SortedList<int, Proizvod> collection = new SortedList<int, Proizvod>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Proizvod");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Proizvod = GetProizvodFromDataRow(row);
+                    collection[Proizvod.IDProizvod] = Proizvod;
+                }
+                cacheProizvod = collection;
+                recacheProizvod = false;
+            }
+            return cacheProizvod;
+        }
+        public int UpdateProizvod(Proizvod Proizvod)
+        {
+            int rows = SqlHelper.ExecuteNonQuery(
+                    ConnectionString,
+                    "proc_update_Proizvod",
+                    Proizvod.IDProizvod,
+                    Proizvod.Naziv.Substring(0, 50),
+                    Proizvod.Proizvod.IDProizvod
+                );
+            if (rows > 0)
+            {
+                Cache(Proizvod);
+                return rows;
+            }
+            return 0;
+        }
+        public void DeleteProizvod(int idProizvod)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, "proc_delete_Proizvod", idProizvod);
+            cacheProizvod.Remove(idProizvod);
+        }
+        private Proizvod GetProizvodFromDataRow(DataRow row)
+        {
+            return new Proizvod
+            {
+                IDProizvod = (int)row["IDProizvod"],
+                Naziv = row["Naziv"].ToString(),
+                BrojProizvoda = row["BrojProizvoda"].ToString(),
+                MinimalnaKolicinaNaSkladistu = (int)row["MinimalnaKolicinaNaSkladistu"],
+                Boja = DetermineBojaProizvod(row["Boja"].ToString()),
+                CijenaBezPDV = (decimal)row["CijenaBezPDV"],
+                Potkategorija = GetPotkategorija((int)row["PotkategorijaID"])
+            };
+        }
+        public static Boja DetermineBojaProizvod(string stringtip)
+        {
+            switch (stringtip)
+            {
+                case "Bijela":                     return Boja.Bijela;                case "Crna":                     return Boja.Crna;                case "Crvena":                     return Boja.Crvena;                case "Plava":                     return Boja.Plava;                case "Siva":                     return Boja.Siva;                case "Srebena":                     return Boja.Srebrna;                case "Srebrna/Crna":                     return Boja.SrebrnaCrna;                case "Šarena":                     return Boja.Sarena;                case "Žuta":                     return Boja.Zuta;                default:
+                    return Boja.NoColor;
+            }
+        }
         //-------------------------------------------------------------------------------------Helper----------------------------------------------
         private uint MaxCount(uint currentCount)
         {
-            return currentCount > MAXTAKE ? MAXTAKE: currentCount;
+            return currentCount > MAXTAKE ? MAXTAKE : currentCount;
         }
         private SortedList<int, T> Aggregate<T>(IEnumerable<KeyValuePair<int, T>> enumerable)
         {

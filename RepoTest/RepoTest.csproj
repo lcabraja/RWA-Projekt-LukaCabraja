@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdventureWorksOBPRepo\AdventureWorksOBPRepo.csproj">
+      <Project>{5598ca09-aa25-4d6e-ae74-3cb34ee5b379}</Project>
+      <Name>AdventureWorksOBPRepo</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

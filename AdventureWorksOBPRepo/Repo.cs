@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace AdventureWorksOBPRepo
             cacheKomercijalist = new SortedList<int, Komercijalist>();
             cacheKreditnaKartica = new SortedList<int, KreditnaKartica>();
             cacheKupac = new SortedList<int, Kupac>();
+            cacheKupacIme = new SortedList<string, Kupac>();
+            cacheKupacPrezime = new SortedList<string, Kupac>();
             cachePotkategorija = new SortedList<int, Potkategorija>();
             cacheProizvod = new SortedList<int, Proizvod>();
             cacheRacun = new SortedList<int, Racun>();
@@ -34,6 +37,8 @@ namespace AdventureWorksOBPRepo
         private SortedList<int, Komercijalist> cacheKomercijalist;
         private SortedList<int, KreditnaKartica> cacheKreditnaKartica;
         private SortedList<int, Kupac> cacheKupac;
+        private SortedList<string, Kupac> cacheKupacIme;
+        private SortedList<string, Kupac> cacheKupacPrezime;
         private SortedList<int, Potkategorija> cachePotkategorija;
         private SortedList<int, Proizvod> cacheProizvod;
         private SortedList<int, Racun> cacheRacun;
@@ -160,7 +165,7 @@ namespace AdventureWorksOBPRepo
            cacheKategorija[IDKategorija];
         public SortedList<int, Kategorija> GetMultipleKategorija()
         {
-            if (cacheDrzava.Count == 0 && !recacheKategorija)
+            if (cacheKategorija.Count == 0 && !recacheKategorija)
             {
                 SortedList<int, Kategorija> collection = new SortedList<int, Kategorija>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kategorija");
@@ -208,7 +213,7 @@ namespace AdventureWorksOBPRepo
             cacheKomercijalist?[idKomercijalist] ?? null;
         public SortedList<int, Komercijalist> GetMultipleKomercijalist()
         {
-            if (cacheDrzava.Count == 0 && !recacheKomercijalist)
+            if (cacheKomercijalist.Count == 0 && !recacheKomercijalist)
             {
                 SortedList<int, Komercijalist> collection = new SortedList<int, Komercijalist>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Komercijalist");
@@ -277,7 +282,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, KreditnaKartica> GetMultipleKreditnaKartica()
         {
-            if (cacheDrzava.Count == 0 && !recacheKreditnaKartica)
+            if (cacheKreditnaKartica.Count == 0 && !recacheKreditnaKartica)
             {
                 SortedList<int, KreditnaKartica> collection = new SortedList<int, KreditnaKartica>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_KreditnaKartica");
@@ -319,6 +324,71 @@ namespace AdventureWorksOBPRepo
                     return TipKreditnaKartica.Other;
             }
         }
+        //-------------------------------------------------------------------------------------Kupac---------------------------------------------- ENUM
+        public Kupac GetKupac(int idKupac)
+        {
+            Kupac kupac;
+            if (cacheKupac.TryGetValue(idKupac, out kupac))
+            {
+                return kupac;
+            }
+            else
+            {
+                kupac = GetKupacFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Kupac", idKupac).Tables[0].Rows[0]);
+                Cache(kupac);
+                return kupac;
+            }
+        }
+        public SortedList<int, Kupac> GetMultipleKupac(OrderBy order, uint count, uint skip = 0)
+        {
+            count = MaxCount(count);
+            if (cacheKupac.Count == 0 && !recacheKupac)
+            {
+                SortedList<int, Kupac> collection = new SortedList<int, Kupac>();
+                Debug.Assert(OrderBy.IDKupacAsc.ToString() != "IDKupacAsc", OrderBy.IDKupacAsc.ToString());
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kupac", order.ToString(), (int)skip, (int)count);
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Kupac = GetKupacFromDataRow(row);
+                    collection[Kupac.IDKupac] = Kupac;
+                }
+                cacheKupac = collection;
+                recacheKupac = false;
+            }
+            int skipcount = 1;
+            return Aggregate<Kupac>(cacheKupac.TakeWhile(x => skip > skipcount++ && count < skipcount));
+        }
+        private Kupac GetKupacFromDataRow(DataRow row)
+        {
+            return new Kupac
+            {
+                IDKupac = (int)row["IDKupac"],
+                Ime = row["Ime"].ToString(),
+                Prezime = row["Prezime"].ToString(),
+                Email = row["Email"].ToString(),
+                Telefon = row["Telefon"].ToString(),
+                Grad = GetGrad((int)row["GradID"])
+            };
+        }
+        //-------------------------------------------------------------------------------------Helper----------------------------------------------
+        private uint MaxCount(uint currentCount)
+        {
+            return currentCount > 50 ? 50 : currentCount;
+        }
+        private SortedList<int, T> Aggregate<T>(IEnumerable<KeyValuePair<int, T>> enumerable)
+        {
+            return enumerable.Aggregate(new SortedList<int, T>(), (x, y) => { x[y.Key] = y.Value; return x; });
+        }
+        public enum OrderBy
+        {
+            IDKupacAsc,
+            IDKupacDesc,
+            ImeAsc,
+            ImeDesc,
+            PrezimeAsc,
+            PrezimeDesc
+        }
         //-------------------------------------------------------------------------------------Cache----------------------------------------------
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {
@@ -349,7 +419,11 @@ namespace AdventureWorksOBPRepo
                 case 5:
                     var KreditnaKartica = item as KreditnaKartica; cacheKreditnaKartica[KreditnaKartica.IDKreditnaKartica] = KreditnaKartica; break;
                 case 6:
-                    var Kupac = item as Kupac; cacheKupac[Kupac.IDKupac] = Kupac; break;
+                    var Kupac = item as Kupac;
+                    cacheKupac[Kupac.IDKupac] = Kupac;
+                    cacheKupacIme[Kupac.Ime] = Kupac;
+                    cacheKupacPrezime[Kupac.Prezime] = Kupac;
+                    break;
                 case 7:
                     var Potkategorija = item as Potkategorija; cachePotkategorija[Potkategorija.IDPotkategorija] = Potkategorija; break;
                 case 8:

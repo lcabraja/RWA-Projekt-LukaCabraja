@@ -59,13 +59,13 @@ namespace AdventureWorksOBPRepo
         // R Drzava             OK
         // R Grad               OK
         // CRUD Kategorija      OK
-        // R Komercijalist
-        // R KreditnaKartica
-        // RU Kupac
-        // CRUD Potkategorija
-        // CRUD Proizvod
-        // R Racun
-        // R Stavka
+        // R Komercijalist      OK
+        // R KreditnaKartica    OK
+        // RU Kupac             OK
+        // CRUD Potkategorija   OK
+        // CRUD Proizvod        OK
+        // R Racun              OK
+        // R Stavka             OK
 
         //---------------------------------------------------------------------------------------------------------------------Drzava-----------------------------------------
         public Drzava GetDrzava(int IDDrzava)
@@ -153,7 +153,7 @@ namespace AdventureWorksOBPRepo
         //---------------------------------------------------------------------------------------------------------------------Kategorija-------------------------------------
         public int CreateKategorija(Kategorija kategorija)
         {
-            int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Kategorija", kategorija.Naziv.Substring(0, 50)).ToString());
+            int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Kategorija", kategorija.Naziv.WithMaxLength(50)).ToString());
             if (IDKategorija > 0)
             {
                 kategorija.IDKategorija = IDKategorija;
@@ -186,7 +186,7 @@ namespace AdventureWorksOBPRepo
                     ConnectionString,
                     "proc_update_Kategorija",
                     kategorija.IDKategorija,
-                    kategorija.Naziv.Substring(0, 50)
+                    kategorija.Naziv.WithMaxLength(50)
                 );
 
             if (rows > 0)
@@ -341,7 +341,7 @@ namespace AdventureWorksOBPRepo
                 return kupac;
             }
         }
-        public SortedList<int, Kupac> GetMultipleKupac(KupacOrderBy order, uint count, uint skip = 0)
+        public SortedList<int, Kupac> GetMultipleKupac(uint count, uint skip = 0, KupacOrderBy order = KupacOrderBy.IDKupacAsc)
         {
             count = MaxCount(count);
             if (cacheKupac.Count == 0 && !recacheKupac)
@@ -366,10 +366,10 @@ namespace AdventureWorksOBPRepo
                     ConnectionString,
                     "proc_update_Kupac",
                     Kupac.IDKupac,
-                    Kupac.Ime.Substring(0, 50),
-                    Kupac.Prezime.Substring(0, 50),
-                    Kupac.Email.Substring(0, 50),
-                    Kupac.Telefon.Substring(0, 25),
+                    Kupac.Ime.WithMaxLength(50),
+                    Kupac.Prezime.WithMaxLength(50),
+                    Kupac.Email.WithMaxLength(50),
+                    Kupac.Telefon.WithMaxLength(25),
                     Kupac.Grad.IDGrad
                 );
 
@@ -395,7 +395,7 @@ namespace AdventureWorksOBPRepo
         //---------------------------------------------------------------------------------------------------------------------Potkategorija----------------------------------
         public int CreatePotkategorija(Potkategorija potkategorija)
         {
-            int IDPotkategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Potkategorija", potkategorija.Naziv.Substring(0, 50)).ToString());
+            int IDPotkategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Potkategorija", potkategorija.Naziv.WithMaxLength(50)).ToString());
             if (IDPotkategorija > 0)
             {
                 potkategorija.IDPotkategorija = IDPotkategorija;
@@ -441,7 +441,7 @@ namespace AdventureWorksOBPRepo
                     ConnectionString,
                     "proc_update_Potkategorija",
                     potkategorija.IDPotkategorija,
-                    potkategorija.Naziv.Substring(0, 50),
+                    potkategorija.Naziv.WithMaxLength(50),
                     potkategorija.Kategorija.IDKategorija
                 );
             if (rows > 0)
@@ -471,7 +471,7 @@ namespace AdventureWorksOBPRepo
             int IDProizvod = int.Parse(SqlHelper.ExecuteScalar(
                 ConnectionString,
                 "proc_create_Proizvod",
-                Proizvod.Naziv.Substring(0, 50),
+                Proizvod.Naziv.WithMaxLength(50),
                 Proizvod.BrojProizvoda,
                 Proizvod.Boja.ToString(),
                 Proizvod.MinimalnaKolicinaNaSkladistu,
@@ -523,7 +523,7 @@ namespace AdventureWorksOBPRepo
                     ConnectionString,
                     "proc_update_Proizvod",
                     Proizvod.IDProizvod,
-                    Proizvod.Naziv.Substring(0, 50),
+                    Proizvod.Naziv.WithMaxLength(50),
                     Proizvod.MinimalnaKolicinaNaSkladistu,
                     Proizvod.BrojProizvoda,
                     Proizvod.Boja.ToString(),
@@ -639,6 +639,22 @@ namespace AdventureWorksOBPRepo
             {
                 SortedList<int, Stavka> collection = new SortedList<int, Stavka>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Stavka");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Stavka = GetStavkaFromDataRow(row);
+                    collection[Stavka.IDStavka] = Stavka;
+                }
+                cacheStavka = collection;
+                recacheStavka = false;
+            }
+            return cacheStavka;
+        }
+        public SortedList<int, Stavka> GetMultipleStavka(int idRacun)
+        {
+            if (cacheStavka.Count == 0 && !recacheStavka)
+            {
+                SortedList<int, Stavka> collection = new SortedList<int, Stavka>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Stavka_targeted", idRacun);
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                     var Stavka = GetStavkaFromDataRow(row);

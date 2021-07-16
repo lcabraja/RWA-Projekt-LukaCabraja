@@ -101,7 +101,7 @@ namespace AdventureWorksOBPRepo
         }
         //----------------------------------------------Grad----------------------------------------------
         public Grad GetGrad(int IDGrad) =>
-            cacheGrad[IDGrad];
+            cacheGrad?[IDGrad] ?? null;
         public SortedList<int, Grad> GetMultipleGrad(int drzavaID)
         {
             if (cacheGrad.Count == 0 && !recacheGrad)
@@ -110,8 +110,8 @@ namespace AdventureWorksOBPRepo
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad");
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
-                    var grad = GetGradFromDataRow(row);
-                    collection[grad.IDGrad] = grad;
+                    var Grad = GetGradFromDataRow(row);
+                    collection[Grad.IDGrad] = Grad;
                 }
                 cacheGrad = collection;
                 recacheGrad = false;
@@ -151,8 +151,8 @@ namespace AdventureWorksOBPRepo
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kategorija");
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
-                    var kategorija = GetKategorijaFromDataRow(row);
-                    collection[kategorija.IDKategorija] = kategorija;
+                    var Kategorija = GetKategorijaFromDataRow(row);
+                    collection[Kategorija.IDKategorija] = Kategorija;
                 }
                 cacheKategorija = collection;
                 recacheKategorija = false;
@@ -190,7 +190,35 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-
+        //----------------------------------------------Komercijalist----------------------------------------------
+        public Komercijalist GetKomercijalist(int idKomercijalist) =>
+            cacheKomercijalist?[idKomercijalist] ?? null;
+        public SortedList<int, Komercijalist> GetMultipleKomercijalist()
+        {
+            if (cacheDrzava.Count == 0 && !recacheKomercijalist)
+            {
+                SortedList<int, Komercijalist> collection = new SortedList<int, Komercijalist>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Komercijalist");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var Komercijalist = GetKomercijalistFromDataRow(row);
+                    collection[Komercijalist.IDKomercijalist] = Komercijalist;
+                }
+                cacheKomercijalist = collection;
+                recacheKomercijalist = false;
+            }
+            return cacheKomercijalist;
+        }
+        private Komercijalist GetKomercijalistFromDataRow(DataRow row)
+        {
+            return new Komercijalist
+            {
+                IDKomercijalist = (int)row["IDKomercijalist"],
+                Ime = row["Ime"].ToString(),
+                Prezime = row["Prezime"].ToString(),
+                StalniZaposlenik = (bool)row["StalniZaposlenik"]
+            };
+        }
         //----------------------------------------------Cache----------------------------------------------
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {

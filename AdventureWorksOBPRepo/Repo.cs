@@ -182,17 +182,17 @@ namespace AdventureWorksOBPRepo
         }
         public int UpdateKategorija(Kategorija kategorija)
         {
-            int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(
+            int rows = SqlHelper.ExecuteNonQuery(
                     ConnectionString,
                     "proc_update_Kategorija",
                     kategorija.IDKategorija,
                     kategorija.Naziv.Substring(0, 50)
-                ).ToString());
+                );
 
-            if (IDKategorija > 0)
+            if (rows > 0)
             {
                 Cache(kategorija);
-                return IDKategorija;
+                return rows;
             }
             return 0;
         }
@@ -360,6 +360,26 @@ namespace AdventureWorksOBPRepo
             int skipcount = 1;
             return Aggregate<Kupac>(cacheKupac.TakeWhile(x => skip > skipcount++ && count < skipcount));
         }
+        public int UpdateKupac(Kupac Kupac)
+        {
+            int rows = SqlHelper.ExecuteNonQuery(
+                    ConnectionString,
+                    "proc_update_Kupac",
+                    Kupac.IDKupac,
+                    Kupac.Ime.Substring(0, 50),
+                    Kupac.Prezime.Substring(0, 50),
+                    Kupac.Email.Substring(0, 50),
+                    Kupac.Telefon.Substring(0, 25),
+                    Kupac.Grad.IDGrad
+                );
+
+            if (rows > 0)
+            {
+                Cache(Kupac);
+                return rows;
+            }
+            return 0;
+        }
         private Kupac GetKupacFromDataRow(DataRow row)
         {
             return new Kupac
@@ -372,6 +392,7 @@ namespace AdventureWorksOBPRepo
                 Grad = GetGrad((int)row["GradID"])
             };
         }
+        //-------------------------------------------------------------------------------------Helper----------------------------------------------
         //-------------------------------------------------------------------------------------Helper----------------------------------------------
         private uint MaxCount(uint currentCount)
         {

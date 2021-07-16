@@ -341,13 +341,13 @@ namespace AdventureWorksOBPRepo
                 return kupac;
             }
         }
-        public SortedList<int, Kupac> GetMultipleKupac(OrderBy order, uint count, uint skip = 0)
+        public SortedList<int, Kupac> GetMultipleKupac(KupacOrderBy order, uint count, uint skip = 0)
         {
             count = MaxCount(count);
             if (cacheKupac.Count == 0 && !recacheKupac)
             {
                 SortedList<int, Kupac> collection = new SortedList<int, Kupac>();
-                Debug.Assert(OrderBy.IDKupacAsc.ToString() != "IDKupacAsc", OrderBy.IDKupacAsc.ToString());
+                Debug.Assert(KupacOrderBy.IDKupacAsc.ToString() != "IDKupacAsc", KupacOrderBy.IDKupacAsc.ToString());
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kupac", order.ToString(), (int)skip, (int)count);
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
@@ -402,7 +402,7 @@ namespace AdventureWorksOBPRepo
         {
             return enumerable.Aggregate(new SortedList<int, T>(), (x, y) => { x[y.Key] = y.Value; return x; });
         }
-        public enum OrderBy
+        public enum KupacOrderBy
         {
             IDKupacAsc,
             IDKupacDesc,

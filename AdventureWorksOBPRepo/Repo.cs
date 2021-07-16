@@ -262,6 +262,22 @@ namespace AdventureWorksOBPRepo
                 return kartica;
             }
         }
+        public SortedList<int, KreditnaKartica> GetMultipleKreditnaKartica()
+        {
+            if (cacheDrzava.Count == 0 && !recacheKreditnaKartica)
+            {
+                SortedList<int, KreditnaKartica> collection = new SortedList<int, KreditnaKartica>();
+                DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_KreditnaKartica");
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var KreditnaKartica = GetKreditnaKarticaFromDataRow(row);
+                    collection[KreditnaKartica.IDKreditnaKartica] = KreditnaKartica;
+                }
+                cacheKreditnaKartica = collection;
+                recacheKreditnaKartica = false;
+            }
+            return cacheKreditnaKartica;
+        }
         private KreditnaKartica GetKreditnaKarticaFromDataRow(DataRow row)
         {
             return new KreditnaKartica

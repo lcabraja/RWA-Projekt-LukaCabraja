@@ -6,7 +6,7 @@ using System.Web;
 
 namespace MVC_Site.Models
 {
-    public class Repo
+    public class RepoSingleton
     {
         private static string cs = ConfigurationManager.ConnectionStrings["cloud"].ConnectionString;
         //public static 

@@ -703,8 +703,9 @@ namespace AdventureWorksOBPRepo
                 }
                 cacheRacun = collection;
                 recacheRacun = false;
+                return collection;
             }
-            return cacheRacun;
+            return Aggregate(cacheRacun.Where(x => x.Value.Kupac.IDKupac == kupacID));
         }
         private Racun GetRacunFromDataRow(DataRow row)
         {
@@ -781,12 +782,12 @@ namespace AdventureWorksOBPRepo
             return new Stavka
             {
                 IDStavka = (int)row["IDStavka"],
-                CijenaPoKomadu = (decimal)row["IDStavka"],
-                Kolicina = (int)row["IDStavka"],
-                PopustUPostocima = (int)row["IDStavka"],
+                CijenaPoKomadu = (decimal)row["CijenaPoKomadu"],
+                Kolicina = (short)row["Kolicina"],
+                PopustUPostocima = (decimal)row["PopustUPostocima"],
                 Proizvod = Proizvod,
                 Racun = Racun,
-                UkupnaCijena = (int)row["IDStavka"]
+                UkupnaCijena = (decimal)row["UkupnaCijena"]
             };
         }
         //---------------------------------------------------------------------------------------------------------------------Helper-----------------------------------------

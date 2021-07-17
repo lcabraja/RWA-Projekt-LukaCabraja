@@ -32,6 +32,8 @@ namespace AdventureWorksOBPRepo
             cacheStavka = new SortedList<int, Stavka>();
         }
 
+        #region ---------------------------------------------------------------------------------------------------------------------Cache vars
+        #region cache lists
         private SortedList<int, Drzava> cacheDrzava;
         private SortedList<int, Grad> cacheGrad;
         private SortedList<int, Kategorija> cacheKategorija;
@@ -44,7 +46,8 @@ namespace AdventureWorksOBPRepo
         private SortedList<int, Proizvod> cacheProizvod;
         private SortedList<int, Racun> cacheRacun;
         private SortedList<int, Stavka> cacheStavka;
-
+        #endregion
+        #region cache bools
         public bool recacheDrzava { get; set; } = false;
         public bool recacheGrad { get; set; } = false;
         public bool recacheKategorija { get; set; } = false;
@@ -55,6 +58,8 @@ namespace AdventureWorksOBPRepo
         public bool recacheProizvod { get; set; } = false;
         public bool recacheRacun { get; set; } = false;
         public bool recacheStavka { get; set; } = false;
+        #endregion
+        #endregion
 
         // R Drzava             OK
         // R Grad               OK

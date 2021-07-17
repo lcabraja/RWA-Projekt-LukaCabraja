@@ -36,15 +36,16 @@ namespace RepoTest
             var komercijalist = repo.GetKomercijalist(komercijalisti.First().Key);
             // R KreditnaKartica    
             var kreditnekartice = repo.GetMultipleKreditnaKartica();
-            var kreditnakartica = repo.GetKreditnaKarticaID(kreditnekartice.First().Key);
-            var kreditnakarticabroj = repo.GetKreditnaKarticaBroj(kreditnakartica.Broj);
+            var kreditnakartica = repo.GetKreditnaKartica(kreditnekartice.First().Key);
+            var kreditnakarticabroj = repo.GetKreditnaKartica(kreditnakartica.Broj);
             // RU Kupac             
             var kupci = repo.GetMultipleKupac(50);
             var kupac = repo.GetKupac(kupci.First().Key);
-            kupac = new Kupac { Ime = "Luka", Prezime = "Cabraja", Email = "luka@cabraja.eu", Grad = grad, Telefon = "0999999999" };
+            kupac = new Kupac { Ime = "Luka", Prezime = "Cabraja", Email = "luka@cabraja.eu", Grad = grad, Telefon = "0999999999", IDKupac = kupac.IDKupac };
             var createkupac = repo.UpdateKupac(kupac);
             // CRUD Potkategorija   
             var potkategorije = repo.GetMultiplePotkategorija();
+            var potkategorije2 = repo.GetMultiplePotkategorija(kategorija.IDKategorija);
             var potkategorija = repo.GetPotkategorija(potkategorije.First().Key);
             var newpot = new Potkategorija { Kategorija = kategorija, Naziv = "kiflice" };
             var createpot = repo.CreatePotkategorija(newpot);
@@ -62,10 +63,12 @@ namespace RepoTest
             var updateproizvod = repo.UpdateProizvod(newproizvod);
             repo.DeleteProizvod(newproizvod.IDProizvod);
             // R Racun              
-            var racuni = repo.GetMultipleRacun();
-            var racun = repo.GetRacun(racuni[0].IDRacun);
+            //var racuni = repo.GetMultipleRacun();
+            var racuni2 = repo.GetMultipleRacun(kupac.IDKupac);
+            var racun = repo.GetRacun(racuni2.First().Value.IDRacun);
             // R Stavka             
-            var stavka = repo.GetMultipleStavka();
+            //var stavka = repo.GetMultipleStavka();
+            var stavka2 = repo.GetMultipleStavka(racun.IDRacun);
             var stavke = repo.GetStavka(racun.IDRacun);
             var hold = "the door";
         }

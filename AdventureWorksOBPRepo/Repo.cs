@@ -67,7 +67,7 @@ namespace AdventureWorksOBPRepo
         // R Racun              OK
         // R Stavka             OK
 
-        //---------------------------------------------------------------------------------------------------------------------Drzava-----------------------------------------
+        #region ---------------------------------------------------------------------------------------------------------------------Drzava
         public Drzava GetDrzava(int IDDrzava)
         {
             if (IDDrzava == 0)
@@ -109,7 +109,8 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Grad-------------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Grad
         public Grad GetGrad(int IDGrad)
         {
             if (IDGrad == 0)
@@ -172,7 +173,8 @@ namespace AdventureWorksOBPRepo
                 Drzava = Drzava
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Kategorija-------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Kategorija
         public int CreateKategorija(Kategorija kategorija)
         {
             int IDKategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Kategorija", kategorija.Naziv.WithMaxLength(50)).ToString());
@@ -246,7 +248,8 @@ namespace AdventureWorksOBPRepo
                 Naziv = row["Naziv"].ToString()
             };
         }
-        //--------------------------------------------------------------------------------------------------------------------- ----------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Komercijalist
         public Komercijalist GetKomercijalist(int idKomercijalist)
         {
             if (idKomercijalist == 0)
@@ -290,7 +293,8 @@ namespace AdventureWorksOBPRepo
                 StalniZaposlenik = (bool)row["StalniZaposlenik"]
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------KreditnaKartica--------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------KreditnaKartica
         public KreditnaKartica GetKreditnaKartica(string brojKartice)
         {
             IEqualityComparer<KreditnaKartica> comparer = new KreditnaKarticaComparer();
@@ -379,7 +383,8 @@ namespace AdventureWorksOBPRepo
                     return TipKreditnaKartica.Other;
             }
         }
-        //---------------------------------------------------------------------------------------------------------------------Kupac------------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Kupac
         public Kupac GetKupac(int idKupac)
         {
             if (idKupac == 0)
@@ -451,7 +456,8 @@ namespace AdventureWorksOBPRepo
                 Grad = Grad
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Potkategorija----------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Potkategorija
         public int CreatePotkategorija(Potkategorija potkategorija)
         {
             int IDPotkategorija = int.Parse(SqlHelper.ExecuteScalar(ConnectionString, "proc_create_Potkategorija", potkategorija.Kategorija.IDKategorija, potkategorija.Naziv.WithMaxLength(50)).ToString());
@@ -545,7 +551,8 @@ namespace AdventureWorksOBPRepo
                 Kategorija = Kategorija
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Proizvod---------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Proizvod
         public int CreateProizvod(Proizvod Proizvod)
         {
             int IDProizvod = int.Parse(SqlHelper.ExecuteScalar(
@@ -656,7 +663,8 @@ namespace AdventureWorksOBPRepo
                     return Boja.NoColor;
             }
         }
-        //---------------------------------------------------------------------------------------------------------------------Racun------------------------------------------
+        #endregion
+        #region---------------------------------------------------------------------------------------------------------------------Racun
         public Racun GetRacun(int idRacun)
         {
             if (idRacun == 0)
@@ -724,7 +732,8 @@ namespace AdventureWorksOBPRepo
                 Kupac = Kupac
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Stavka-----------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Stavka
         public Stavka GetStavka(int idStavka)
         {
             if (idStavka == 0)
@@ -790,7 +799,8 @@ namespace AdventureWorksOBPRepo
                 UkupnaCijena = (decimal)row["UkupnaCijena"]
             };
         }
-        //---------------------------------------------------------------------------------------------------------------------Helper-----------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Helper
         private uint MaxCount(uint currentCount)
         {
             return currentCount > MAXTAKE ? MAXTAKE : currentCount;
@@ -808,7 +818,8 @@ namespace AdventureWorksOBPRepo
             PrezimeAsc,
             PrezimeDesc
         }
-        //---------------------------------------------------------------------------------------------------------------------Cache------------------------------------------
+        #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Cache
         static Dictionary<Type, int> keyValuePairs = new Dictionary<Type, int>
         {
             { typeof(Drzava), 1 },
@@ -875,5 +886,6 @@ namespace AdventureWorksOBPRepo
             GetMultipleKomercijalist();
             GetMultipleKreditnaKartica();
         }
+        #endregion
     }
 }

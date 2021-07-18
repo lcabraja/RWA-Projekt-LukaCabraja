@@ -1,11 +1,4 @@
-﻿const urlParams = new URLSearchParams(window.location.search);
-document.getElementById("order").selectedIndex = parseInt(urlParams.get('orderby'));
-
-document.getElementById("order").onchange = function () {
-    document.location.replace("/Kupac/Index?orderby=" + this.value);
-}
-
-function getQueryStringParameterByName(name) {
+﻿function getQueryStringParameterByName(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
@@ -17,16 +10,17 @@ function updateUrlParameter(url, param, value) {
     return url.replace(regex, '$1' + value);
 }
 
+//check if there are any previous pages
+page = parseInt(getQueryStringParameterByName("page"));
+pageint = !isNaN(page) ? page : 0;
+if (pageint == 0) {
+    console.log("you shall not pass");
+    document.getElementById("pagedown").disabled = true;
+}
+
 document.getElementById("pagedown").onclick = function () {
     console.log("beep");
-    // determine if there are any previous pages
-    take = parseInt(getQueryStringParameterByName("take"));
-    takeint = !isNaN(take) ? take : 15;
-    if (parseInt(document.getElementById("anchor").attributes.remaining) < takeint) {
-        console.log("you shall not pass");
-        return;
-    }
-
+    // determing next page number
     page = getQueryStringParameterByName("page");
     if (page != "") {
         pageint = parseInt(page) - 1;
@@ -45,16 +39,16 @@ document.getElementById("pagedown").onclick = function () {
     }
 }
 
+// check if there are any remaining pages
+take = parseInt(getQueryStringParameterByName("take"));
+takeint = !isNaN(take) ? take : 15;
+if (parseInt(document.getElementById("anchor").attributes.remaining.value) < takeint) {
+    console.log("you shall not pass");
+    document.getElementById("pageup").disabled = true;
+}
+
 document.getElementById("pageup").onclick = function () {
     console.log("boop");
-    // check if there are any remaining pages
-    take = parseInt(getQueryStringParameterByName("take"));
-    takeint = !isNaN(take) ? take : 15;
-    if (parseInt(document.getElementById("anchor").remaining) < takeint) {
-        console.log("you shall not pass");
-        return;
-    }
-
     // determing next page number
     page = getQueryStringParameterByName("page");
     if (page != "") {
@@ -66,6 +60,23 @@ document.getElementById("pageup").onclick = function () {
         }
     } else {
         newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "page=1";
+        location.replace(newlocation);
+    }
+}
+
+// set order in ui
+index = parseInt(getQueryStringParameterByName("orderby"));
+console.log({ index });
+indexint = !isNaN(index) ? index : 0;
+console.log({ indexint });
+document.getElementById("order").selectedIndex = indexint;
+// set order in querystring
+document.getElementById("order").onchange = function () {
+    orderby = getQueryStringParameterByName("orderby");
+    if (orderby != "") {
+        location.replace(updateUrlParameter(location.href, "orderby", this.value));
+    } else {
+        newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "orderby=1";
         location.replace(newlocation);
     }
 }

@@ -23,10 +23,38 @@ textarea {
     max-width: 280px;
 }
 
-.c-d-flex {
+.d-inline-block{
+    display: inline-block !important;
+}.
+
+ .d-flex {
     display: flex !important;
 }
 
 .c-space-between {
     justify-content: space-between;
+}
+
+.gap-1 {
+    grid-gap: 1rem;
+}
+
+.gap-2 {
+    grid-gap: 2rem;
+}
+
+.gap-3 {
+    grid-gap: 3rem;
+}
+
+.gap-4 {
+    grid-gap: 4rem;
+}
+
+.gap-5 {
+    grid-gap: 5rem;
+}
+.actions {
+    text-align: right;
+    margin: auto;
 }

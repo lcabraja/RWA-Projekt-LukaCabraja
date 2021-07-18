@@ -21,8 +21,8 @@ document.getElementById("pagedown").onclick = function () {
     console.log("beep");
     // determine if there are any previous pages
     take = parseInt(getQueryStringParameterByName("take"));
-    takeint = !isNaN(take) ? take : 30;
-    if (parseInt(document.getElementById("anchor").remaining) < takeint) {
+    takeint = !isNaN(take) ? take : 15;
+    if (parseInt(document.getElementById("anchor").attributes.remaining) < takeint) {
         console.log("you shall not pass");
         return;
     }
@@ -49,7 +49,7 @@ document.getElementById("pageup").onclick = function () {
     console.log("boop");
     // check if there are any remaining pages
     take = parseInt(getQueryStringParameterByName("take"));
-    takeint = !isNaN(take) ? take : 30;
+    takeint = !isNaN(take) ? take : 15;
     if (parseInt(document.getElementById("anchor").remaining) < takeint) {
         console.log("you shall not pass");
         return;

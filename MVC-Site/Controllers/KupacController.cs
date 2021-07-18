@@ -17,20 +17,23 @@ namespace MVC_Site.Controllers
             int page;
             int skip;
             int take;
-            if (int.TryParse(Request.QueryString.Get("page"), out page) && page >= 0)
+
+            if (!int.TryParse(Request.QueryString.Get("take"), out take))
             {
-                if (!int.TryParse(Request.QueryString.Get("take"), out take)) {
-                    take = 15;
-                }
-                skip = take * page;
-                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
+                take = 15;
             }
-            else
+            if (!int.TryParse(Request.QueryString.Get("page"), out page))
             {
-                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac(16, 0, order).Values;
+                page = 0;
             }
+            skip = take * page;
+
+            kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
             ViewBag.remaining = kupci.Count;
-            return View(kupci.Take(kupci.Count - 1));
+            if (kupci.Count > take)
+                return View(kupci.Take(kupci.Count - 1));
+            else
+                return View(kupci.Take(take));
         }
 
         private AdventureWorksOBPRepo.Repo.KupacOrderBy DetermineOrder(string queryStringRequest)

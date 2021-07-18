@@ -12,35 +12,42 @@ namespace MVC_Site.Controllers
         // GET: Kupac
         public ActionResult Index()
         {
-            var order = DetermineOrder(Request.QueryString.Get("order"));
+            IList<AdventureWorksOBPRepo.Kupac> kupci;
+            var order = DetermineOrder(Request.QueryString.Get("orderby"));
             int page;
             int skip;
             int take;
-            if (int.TryParse(Request.QueryString.Get("page"), out page) &&
-                int.TryParse(Request.QueryString.Get("perpage"), out take) &&
-                page >= 0 && take >= 0)
+            if (int.TryParse(Request.QueryString.Get("page"), out page) && page >= 0)
             {
+                if (!int.TryParse(Request.QueryString.Get("take"), out take)) {
+                    take = 15;
+                }
                 skip = take * page;
-                return View(Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take, (uint)skip, order).Values);
+                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
             }
-            return View(Models.RepoSingleton.GetInstance().GetMultipleKupac(30, 0, order).Values);
+            else
+            {
+                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac(16, 0, order).Values;
+            }
+            ViewBag.remaining = kupci.Count;
+            return View(kupci.Take(kupci.Count - 1));
         }
 
         private AdventureWorksOBPRepo.Repo.KupacOrderBy DetermineOrder(string queryStringRequest)
         {
             switch (queryStringRequest)
             {
-                case "IDKupacAsc":
+                case "0":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.IDKupacAsc;
-                case "IDKupacDesc":
+                case "1":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.IDKupacDesc;
-                case "ImeAsc":
+                case "2":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.ImeAsc;
-                case "ImeDesc":
+                case "3":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.ImeDesc;
-                case "PrezimeAsc":
+                case "4":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.PrezimeAsc;
-                case "PrezimeDesc":
+                case "5":
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.PrezimeDesc;
                 default:
                     return AdventureWorksOBPRepo.Repo.KupacOrderBy.IDKupacAsc;

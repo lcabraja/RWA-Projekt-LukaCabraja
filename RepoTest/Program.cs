@@ -1,4 +1,5 @@
 ﻿using AdventureWorksOBPRepo;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,58 @@ namespace RepoTest
         const string localhost = "Server=.;Database=AdventureWorksOBP;Uid=SA;Pwd=SQL";
         const string cloud = "Server=195.201.100.7;Database=AdventureWorksOBP;Uid=SA;Pwd=Pa$$word";
         static void Main(string[] args)
+        {
+            //CRUDTest();
+            SerializationTest();
+            var hold = "the door";
+        }
+
+        private static void SerializationTest()
+        {
+
+            Repo repo = new Repo(localhost);
+            var drzave = repo.GetMultipleDrzava();
+            string drzava = JsonConvert.SerializeObject(drzave.First().Value);
+            var drzavaback = JsonConvert.DeserializeObject(drzava, typeof(Drzava));
+
+            var gradovi = repo.GetMultipleGrad();
+            string grad = JsonConvert.SerializeObject(gradovi.First().Value);
+            var gradback = JsonConvert.DeserializeObject(grad, typeof(Grad));
+
+            var kategorije = repo.GetMultipleKategorija();
+            string kategorija = JsonConvert.SerializeObject(kategorije.First().Value);
+            var kategorijaback = JsonConvert.DeserializeObject(kategorija, typeof(Kategorija));
+
+            var komercijalisti = repo.GetMultipleKomercijalist();
+            string komercijalist = JsonConvert.SerializeObject(komercijalisti.First().Value);
+            var komercijalistback = JsonConvert.DeserializeObject(komercijalist, typeof(Komercijalist));
+
+            var kreditnekartice = repo.GetMultipleKreditnaKartica();
+            string kreditnakartica = JsonConvert.SerializeObject(kreditnekartice.First().Value);
+            var kreditnakarticaback = JsonConvert.DeserializeObject(kreditnakartica, typeof(KreditnaKartica));
+
+            var kupci = repo.GetMultipleKupac(30);
+            string kupac = JsonConvert.SerializeObject(kupci.First().Value);
+            var kupacback = JsonConvert.DeserializeObject(kupac, typeof(Kupac));
+
+            var potkategorije = repo.GetMultiplePotkategorija();
+            string potkategorija = JsonConvert.SerializeObject(potkategorije.First().Value);
+            var potkategorijaback = JsonConvert.DeserializeObject(potkategorija, typeof(Potkategorija));
+
+            var proizvodi = repo.GetMultipleProizvod(30);
+            string proizvod = JsonConvert.SerializeObject(proizvodi.First().Value);
+            var proizvodback = JsonConvert.DeserializeObject(proizvod, typeof(Proizvod));
+
+            var racuni = repo.GetMultipleRacun();
+            string racun = JsonConvert.SerializeObject(racuni.First().Value);
+            var racunback = JsonConvert.DeserializeObject(racun, typeof(Racun));
+
+            var stavke = repo.GetMultipleStavka();
+            string stavka = JsonConvert.SerializeObject(stavke.First().Value);
+            var stavkaback = JsonConvert.DeserializeObject(stavka, typeof(Stavka));
+        }
+
+        private static void CRUDTest()
         {
             Repo repo = new Repo(localhost);
             //Repo repo = new Repo("Server=/;Database=AdventureWorksOBP;UserId=SA;Password=SQL;");
@@ -70,7 +123,6 @@ namespace RepoTest
             //var stavka = repo.GetMultipleStavka();
             var stavka2 = repo.GetMultipleStavka(racun.IDRacun);
             var stavke = repo.GetStavka(racun.IDRacun);
-            var hold = "the door";
         }
     }
 }

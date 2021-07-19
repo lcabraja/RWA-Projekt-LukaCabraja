@@ -25,13 +25,13 @@ textarea {
 
 .d-inline-block{
     display: inline-block !important;
-}.
+}
 
  .d-flex {
     display: flex !important;
 }
 
-.c-space-between {
+.space-between {
     justify-content: space-between;
 }
 
@@ -55,6 +55,6 @@ textarea {
     grid-gap: 5rem;
 }
 .actions {
-    text-align: right;
+    text-align: right !important;
     margin: auto;
 }

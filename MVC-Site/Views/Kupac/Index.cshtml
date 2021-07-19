@@ -1,19 +1,30 @@
 ﻿@model IEnumerable<AdventureWorksOBPRepo.Kupac>
 
 @{
-    ViewBag.Title = "Kupci";
+    ViewBag.Title = "Customers";
 }
 
-<h2>Kupci</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>Customers</h2>
+<div class="d-flex space-between">
+    <select id="order" class="form-control" style="margin-bottom: 1rem;">
+        <option value="0">Default ascending</option>
+        <option value="1">Default descending</option>
+        <option value="2">First name ascending</option>
+        <option value="3">First name descending</option>
+        <option value="4">Last name ascending</option>
+        <option value="5">Last name descending</option>
+    </select>
+    <div>
+        <select id="drzave">
+            <option>Drzava</option>
+        </select>
+        <select id="Gradovi">
+            <option>Grad</option>
+        </select>
+    </div>
+</div>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IDKupac)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Ime)
         </th>
@@ -26,32 +37,45 @@
         <th>
             @Html.DisplayNameFor(model => model.Telefon)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Grad)
+        </th>
+        <th class="actions">
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IDKupac)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Prezime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telefon)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prezime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grad.Naziv)
+            </td>
+            <td class="gap-1 actions">
+                @Html.ActionLink("Update", "Edit", new { id = item.IDKupac }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IDKupac })
+            </td>
+        </tr>
+    }
 </table>
+<div class="d-flex space-between">
+    <button id="pagedown" class="btn btn-default">Previous Page</button>
+    <button id="pageup" class="btn btn-default">Next Page</button>
+</div>
+
+<i id="anchor" remaining="@ViewBag.remaining"></i>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Kupac/Index.js")
+}

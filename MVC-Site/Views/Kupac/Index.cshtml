@@ -15,23 +15,14 @@
         <option value="5">Last name descending</option>
     </select>
     <div>
-        <select id="drzave">
-            <option value="-1">Please select...</option>
-        </select>
-        <select id="Gradovi">
-            <option value="-1">Please select...</option>
-        </select>
-        <div class="dropdown show">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown link
-            </a>
-
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
+        <span class="d-flex gap-1">
+            <select id="drzave" class="form-control">
+                <option value="-1">Please select a country...</option>
+            </select>
+            <select id="Gradovi" class="form-control">
+                <option value="-1">Please select a country...</option>
+            </select>
+        </span>
     </div>
 </div>
 <table class="table">
@@ -82,7 +73,10 @@
 </table>
 <div class="d-flex space-between">
     <button id="pagedown" class="btn btn-default">Previous Page</button>
+    <div>
+
     <button id="pageup" class="btn btn-default">Next Page</button>
+    </div>
 </div>
 
 <i id="anchor" remaining="@ViewBag.remaining"></i>

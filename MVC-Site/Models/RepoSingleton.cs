@@ -11,7 +11,7 @@ namespace MVC_Site.Models
     {
         private static Repo obj = null;
         private static readonly object padLock = new object();
-        private static string cs = ConfigurationManager.ConnectionStrings["local"].ConnectionString;
+        private static string cs = ConfigurationManager.ConnectionStrings["cloud"].ConnectionString;
 
         public static Repo GetInstance()
         {

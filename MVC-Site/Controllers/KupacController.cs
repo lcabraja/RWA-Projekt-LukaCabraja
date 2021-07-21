@@ -68,24 +68,25 @@ namespace MVC_Site.Controllers
             Session["update-kupac"] = Models.RepoSingleton.GetInstance().GetKupac(id);
             return new RedirectResult("/Kupac/Update.aspx");
         }
-
-        public JsonResult Grad()
+        public JsonResult Grad(int id)
+        {
+            return Json(Models.RepoSingleton.GetInstance().GetGrad(id), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult Gradovi()
         {
             return Json(Models.RepoSingleton.GetInstance().GetMultipleGrad().Values, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GradDrzava(int idDrzava)
+        public JsonResult GradDrzava(int id)
         {
-            return Json(Models.RepoSingleton.GetInstance().GetMultipleGrad(idDrzava).Values, JsonRequestBehavior.AllowGet);
+            return Json(Models.RepoSingleton.GetInstance().GetMultipleGrad(id).Values, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Drzava()
+        public JsonResult Drzave()
         {
             return Json(Models.RepoSingleton.GetInstance().GetMultipleDrzava().Values, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Drzava(int idDrzava)
+        public JsonResult Drzava(int id)
         {
-            return Json(Models.RepoSingleton.GetInstance().GetDrzava(idDrzava), JsonRequestBehavior.AllowGet);
+            return Json(Models.RepoSingleton.GetInstance().GetDrzava(id), JsonRequestBehavior.AllowGet);
         }
-
-        
     }
 }

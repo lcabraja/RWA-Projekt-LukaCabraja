@@ -66,9 +66,7 @@ document.getElementById("pageup").onclick = function () {
 
 // set order in ui
 index = parseInt(getQueryStringParameterByName("orderby"));
-console.log({ index });
 indexint = !isNaN(index) ? index : 0;
-console.log({ indexint });
 document.getElementById("order").selectedIndex = indexint;
 // set order in querystring
 document.getElementById("order").onchange = function () {
@@ -79,4 +77,57 @@ document.getElementById("order").onchange = function () {
         newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "orderby=1";
         location.replace(newlocation);
     }
+}
+
+drzavedropdown = document.getElementById("drzave");
+graddropdown = document.getElementById("gradovi");
+
+// AJAX fill selects
+async function ajaxDrzave() {
+    drzaveresponse = await fetch("Drzave");
+    if (drzaveresponse.ok) {
+        let drzavejson = await drzaveresponse.json();
+        return drzavejson
+    } else {
+        drzavedropdown.innerHTML = "<option>Connection Error</option>";
+        return null;
+    }
+}
+
+async function ajaxGradovi(IDDrzava) {
+    gradresponse = await fetch("GradDrzava/" + IDDrzava);
+    if (gradresponse.ok) {
+        let gradjson = await gradresponse.json();
+        return gradjson
+    } else {
+        graddropdown.innerHTML = "<option>Connection Error</option>";
+        return null;
+    }
+}
+
+// fill drzave dropdown
+function fillDrzave(drzavejson) {
+    options = '<option value="-1">Please select a country...</option>';
+    drzavejson.forEach(x => options += `<option value=${x.IDDrzava}>${x.Naziv}</option>`)
+    drzavedropdown.innerHTML = options;
+}
+
+// get drzave and fill dropdown
+ajaxDrzave().then(fillDrzave);
+
+// fill grad on drzava change
+drzavedropdown.onchange = function () {
+    ajaxGradovi(this.value).then(fillGrad)
+}
+
+// fill grad dropdown
+function fillGrad(gradjson) {
+    options = ''
+    gradjson.forEach(x => options += `<option value=${x.IDGrad}>${x.Naziv}</option>`)
+    graddropdown.innerHTML = options;
+}
+
+// send request on grad select
+graddropdown.onchange = function () {
+    console.log(this.value)
 }

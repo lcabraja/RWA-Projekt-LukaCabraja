@@ -94,6 +94,7 @@ async function ajaxDrzave() {
     }
 }
 
+// get gradovi json
 async function ajaxGradovi(IDDrzava) {
     gradresponse = await fetch("GradDrzava/" + IDDrzava);
     if (gradresponse.ok) {
@@ -105,6 +106,30 @@ async function ajaxGradovi(IDDrzava) {
     }
 }
 
+// get single grad json
+async function ajaxGrad(IDGrad) {
+    gradresponse = await fetch("Grad/" + IDGrad);
+    if (gradresponse.ok) {
+        let gradjson = await gradresponse.json();
+        return gradjson
+    } else {
+        graddropdown.innerHTML = "<option>Connection Error</option>";
+        return null;
+    }
+}
+
+// set dropdown values
+function setStartupValues(singlegradjson) {
+    drzavedropdown.value = singlegradjson.Drzava.IDDrzava;
+    graddropdown.value = singlegradjson.IDGrad;
+}
+
+// get gradovi on startup
+async function getGradovi(grad) {
+    await ajaxGradovi(grad.Drzava.IDDrzava).then(fillGrad)
+    setStartupValues(grad);
+}
+
 // fill drzave dropdown
 function fillDrzave(drzavejson) {
     options = '<option value="-1">Please select a country...</option>';
@@ -113,21 +138,36 @@ function fillDrzave(drzavejson) {
 }
 
 // get drzave and fill dropdown
-ajaxDrzave().then(fillDrzave);
+ajaxDrzave().then(fillDrzave).then(() => {
+    grad = parseInt(getQueryStringParameterByName("grad"));
+    if (!isNaN(grad)) {
+        ajaxGrad(grad).then(getGradovi)
+    }
+});
 
 // fill grad on drzava change
 drzavedropdown.onchange = function () {
-    ajaxGradovi(this.value).then(fillGrad)
+    if (this.value > 0) {
+        ajaxGradovi(this.value).then(fillGrad)
+    }
 }
 
 // fill grad dropdown
 function fillGrad(gradjson) {
-    options = ''
+    options = '<option value="-1">Please select a city...</option>';
     gradjson.forEach(x => options += `<option value=${x.IDGrad}>${x.Naziv}</option>`)
     graddropdown.innerHTML = options;
 }
 
 // send request on grad select
 graddropdown.onchange = function () {
-    console.log(this.value)
+    if (this.value > 0) {
+        orderby = getQueryStringParameterByName("grad");
+        if (orderby != "") {
+            location.replace(updateUrlParameter(location.href, "grad", this.value));
+        } else {
+            newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "grad=" + this.value;
+            location.replace(newlocation);
+        }
+    }
 }

@@ -427,6 +427,23 @@ namespace AdventureWorksOBPRepo
             }
             return Aggregate<Kupac>(cacheKupac.Skip((int)skip).Take((int)take));
         }
+
+        public SortedList<int, Kupac> GetMultipleKupac(int gradid, uint take, uint skip = 0, KupacOrderBy order = KupacOrderBy.IDKupacAsc)
+        {
+            take = MaxCount(take);
+            SortedList<int, Kupac> collection = new SortedList<int, Kupac>();
+            Debug.WriteLine(order);
+            var kupac = KupacOrderBy.IDKupacAsc.ToString();
+            DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kupac_Grad", order.ToString(), gradid, (int)skip, (int)take);
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                var Kupac = GetKupacFromDataRow(row);
+                collection[Kupac.IDKupac] = Kupac;
+            }
+            cacheKupac = collection;
+            recacheKupac = false;
+            return collection;
+        }
         public int UpdateKupac(Kupac Kupac)
         {
             int rows = SqlHelper.ExecuteNonQuery(
@@ -656,16 +673,26 @@ namespace AdventureWorksOBPRepo
             switch (stringtip)
             {
                 case "Bijela":
-                    return Boja.Bijela;                case "Crna":
-                    return Boja.Crna;                case "Crvena":
-                    return Boja.Crvena;                case "Plava":
-                    return Boja.Plava;                case "Siva":
-                    return Boja.Siva;                case "Srebena":
-                    return Boja.Srebrna;                case "Srebrna/Crna":
-                    return Boja.SrebrnaCrna;                case "Šarena":
-                    return Boja.Sarena;                case "Žuta":
-                    return Boja.Zuta;                default:
-                    return Boja.NoColor;
+                    return Boja.Bijela;
+                case "Crna":
+                    return Boja.Crna;
+                case "Crvena":
+                    return Boja.Crvena;
+                case "Plava":
+                    return Boja.Plava;
+                case "Siva":
+                    return Boja.Siva;
+                case "Srebena":
+                    return Boja.Srebrna;
+                case "Srebrna/Crna":
+                    return Boja.SrebrnaCrna;
+                case "Šarena":
+                    return Boja.Sarena;
+                case "Žuta":
+                    return Boja.Zuta;
+                default:
+                    return Boja.NoColor;
+
             }
         }
         #endregion

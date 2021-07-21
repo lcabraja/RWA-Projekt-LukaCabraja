@@ -14,6 +14,7 @@ namespace MVC_Site.Controllers
         {
             IList<AdventureWorksOBPRepo.Kupac> kupci;
             var order = DetermineOrder(Request.QueryString.Get("orderby"));
+            int grad;
             int page;
             int skip;
             int take;
@@ -28,7 +29,16 @@ namespace MVC_Site.Controllers
             }
             skip = take * page;
 
-            kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
+            if (!int.TryParse(Request.QueryString.Get("grad"), out grad))
+            {
+                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
+
+            }
+            else
+            {
+                kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac(grad, (uint)take + 1, (uint)skip, order).Values;
+            }
+
             ViewBag.remaining = kupci.Count;
             if (kupci.Count > take)
                 return View(kupci.Take(kupci.Count - 1));

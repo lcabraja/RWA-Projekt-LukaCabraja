@@ -123,6 +123,7 @@
     <Compile Include="Controllers\KupacController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PotkategorijaController.cs" />
+    <Compile Include="Controllers\ProizvodController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -140,6 +141,7 @@
     <Compile Include="Kupac\Update.aspx.designer.cs">
       <DependentUpon>Update.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\EnumExtension.cs" />
     <Compile Include="Models\RepoSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -170,6 +172,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\Kupac\Index.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Proizvod\Index.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -194,6 +197,11 @@
     <Content Include="Views\Kategorija\Create.cshtml" />
     <Content Include="Views\Kategorija\Edit.cshtml" />
     <Content Include="Views\Kategorija\Delete.cshtml" />
+    <Content Include="Views\Proizvod\Index.cshtml" />
+    <Content Include="Views\Proizvod\Details.cshtml" />
+    <Content Include="Views\Proizvod\Create.cshtml" />
+    <Content Include="Views\Proizvod\Edit.cshtml" />
+    <Content Include="Views\Proizvod\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

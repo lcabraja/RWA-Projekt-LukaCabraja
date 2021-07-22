@@ -636,7 +636,7 @@ namespace AdventureWorksOBPRepo
                     Proizvod.IDProizvod,
                     Proizvod.Naziv.WithMaxLength(50),
                     Proizvod.BrojProizvoda,
-                    Proizvod.Boja.ToString(),
+                    DetermineBojaRepo(Proizvod.Boja),
                     Proizvod.MinimalnaKolicinaNaSkladistu,
                     Proizvod.CijenaBezPDV,
                     Proizvod.Potkategorija.IDPotkategorija
@@ -648,6 +648,20 @@ namespace AdventureWorksOBPRepo
             }
             return 0;
         }
+
+        private string DetermineBojaRepo(Boja boja)
+        {
+            switch (boja)
+            {
+                case Boja.NoColor:
+                    return null;
+                case Boja.SrebrnaCrna:
+                    return "Srebrna/Crna";
+                default:
+                    return boja.ToString();
+            }
+        }
+
         public void DeleteProizvod(int idProizvod)
         {
             SqlHelper.ExecuteNonQuery(ConnectionString, "proc_delete_Proizvod", idProizvod);

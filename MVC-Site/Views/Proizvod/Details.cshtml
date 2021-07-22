@@ -1,0 +1,58 @@
+﻿@model AdventureWorksOBPRepo.Proizvod
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Proizvod</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDProizvod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDProizvod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naziv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BrojProizvoda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrojProizvoda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinimalnaKolicinaNaSkladistu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinimalnaKolicinaNaSkladistu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CijenaBezPDV)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CijenaBezPDV)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AdventureWorksOBPRepo.Proizvod>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDProizvod)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Naziv)
+        </th>
+        <th>
+            @Html.DisplayName("Potkategorija")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Boja)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BrojProizvoda)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinimalnaKolicinaNaSkladistu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CijenaBezPDV)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDProizvod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Potkategorija.Naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Boja)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BrojProizvoda)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinimalnaKolicinaNaSkladistu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CijenaBezPDV)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IDProizvod }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IDProizvod }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IDProizvod })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventureWorksOBPRepo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,16 +9,20 @@ namespace MVC_Site.Controllers
 {
     public class KategorijaController : Controller
     {
+        private AdventureWorksOBPRepo.Repo repo = Models.RepoSingleton.GetInstance();
+
         // GET: Kategorija
         public ActionResult Index()
         {
-            return View(Models.RepoSingleton.GetInstance().GetMultipleKategorija().Values);
+            return View(repo.GetMultipleKategorija().Values);
         }
 
         // GET: Kategorija/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (!id.HasValue || id.Value <= 0)
+                return RedirectToAction("Index");
+            return View(repo.GetKategorija(id.Value));
         }
 
         // GET: Kategorija/Create
@@ -32,7 +37,12 @@ namespace MVC_Site.Controllers
         {
             try
             {
-                // TODO: Add insert  logic here
+                var naziv = collection.Get("Naziv").Trim();
+                if (naziv == string.Empty)
+                    throw new Exception("Must have a title");
+                var kategorija = new Kategorija { Naziv = naziv };
+
+                repo.CreateKategorija(kategorija);
 
                 return RedirectToAction("Index");
             }
@@ -43,9 +53,11 @@ namespace MVC_Site.Controllers
         }
 
         // GET: Kategorija/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (!id.HasValue || id.Value <= 0)
+                return RedirectToAction("Index");
+            return View(repo.GetKategorija(id.Value));
         }
 
         // POST: Kategorija/Edit/5
@@ -54,7 +66,12 @@ namespace MVC_Site.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+                var naziv = collection.Get("Naziv").Trim();
+                if (naziv == string.Empty)
+                    throw new Exception("Must have a title");
+                var kategorija = new Kategorija { IDKategorija = id, Naziv = naziv };
+
+                repo.UpdateKategorija(kategorija);
 
                 return RedirectToAction("Index");
             }
@@ -65,18 +82,22 @@ namespace MVC_Site.Controllers
         }
 
         // GET: Kategorija/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return View(repo.GetKategorija(id.Value));
         }
 
         // POST: Kategorija/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
+            if (id <= 0)
+                return RedirectToAction("Index");
             try
             {
-                // TODO: Add delete logic here
+                repo.DeleteKategorija(id);
 
                 return RedirectToAction("Index");
             }

@@ -21,7 +21,7 @@ namespace MVC_Site.Controllers
         // GET: Potkategorija/Details/5
         public ActionResult Details(int? id)
         {
-            if (!id.HasValue)
+            if (!id.HasValue || id.Value <= 0)
                 return RedirectToAction("Index");
             return View(repo.GetPotkategorija(id.Value));
         }
@@ -39,7 +39,9 @@ namespace MVC_Site.Controllers
         {
             try
             {
-                var naziv = collection.Get("Naziv");
+                var naziv = collection.Get("Naziv").Trim();
+                if (naziv == string.Empty)
+                    throw new Exception("Must have a title");
                 var kategorija = repo.GetKategorija(int.Parse(collection.Get("Kategorija")));
                 var potkategorija = new Potkategorija { Naziv = naziv, Kategorija = kategorija };
 
@@ -74,7 +76,9 @@ namespace MVC_Site.Controllers
                 return RedirectToAction("Index");
             try
             {
-                var naziv = collection.Get("Naziv");
+                var naziv = collection.Get("Naziv").Trim();
+                if (naziv == string.Empty)
+                    throw new Exception("Must have a title");
                 var kategorija = repo.GetKategorija(int.Parse(collection.Get("Kategorija")));
                 var potkategorija = new Potkategorija { IDPotkategorija = id, Naziv = naziv, Kategorija = kategorija };
 

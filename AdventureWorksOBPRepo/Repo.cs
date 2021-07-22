@@ -639,7 +639,7 @@ namespace AdventureWorksOBPRepo
                     DetermineBojaRepo(Proizvod.Boja),
                     Proizvod.MinimalnaKolicinaNaSkladistu,
                     Proizvod.CijenaBezPDV,
-                    Proizvod.Potkategorija.IDPotkategorija
+                    Proizvod.Potkategorija?.IDPotkategorija ?? null
                 );
             if (rows > 0)
             {

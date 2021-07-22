@@ -119,8 +119,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KategorijaController.cs" />
     <Compile Include="Controllers\KupacController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PotkategorijaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -182,6 +184,16 @@
     <Content Include="Views\Kupac\Details.cshtml" />
     <Content Include="Views\Kupac\Index.cshtml" />
     <Content Include="Views\Kupac\Edit.cshtml" />
+    <Content Include="Views\Kategorija\Index.cshtml" />
+    <Content Include="Views\Potkategorija\Index.cshtml" />
+    <Content Include="Views\Potkategorija\Create.cshtml" />
+    <Content Include="Views\Potkategorija\Edit.cshtml" />
+    <Content Include="Views\Potkategorija\Delete.cshtml" />
+    <Content Include="Views\Potkategorija\Details.cshtml" />
+    <Content Include="Views\Kategorija\Details.cshtml" />
+    <Content Include="Views\Kategorija\Create.cshtml" />
+    <Content Include="Views\Kategorija\Edit.cshtml" />
+    <Content Include="Views\Kategorija\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

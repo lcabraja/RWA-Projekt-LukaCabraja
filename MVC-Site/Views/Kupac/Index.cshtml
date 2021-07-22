@@ -28,6 +28,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.IDKupac)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Ime)
         </th>
         <th>
@@ -49,6 +52,9 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDKupac)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ime)
             </td>
@@ -75,7 +81,7 @@
     <button id="pagedown" class="btn btn-default">Previous Page</button>
     <div>
 
-    <button id="pageup" class="btn btn-default">Next Page</button>
+        <button id="pageup" class="btn btn-default">Next Page</button>
     </div>
 </div>
 

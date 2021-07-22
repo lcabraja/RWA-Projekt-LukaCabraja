@@ -1,0 +1,46 @@
+﻿@model IEnumerable<AdventureWorksOBPRepo.Potkategorija>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Potkategorije</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDPotkategorija)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Naziv)
+        </th>
+        <th>
+            @Html.DisplayName("Kategorija")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDPotkategorija)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kategorija.Naziv)
+            </td>
+            <td class="gap-1 actions">
+                @Html.ActionLink("Edit", "Edit", new { id = item.IDPotkategorija }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IDPotkategorija }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IDPotkategorija })
+            </td>
+        </tr>
+    }
+
+</table>

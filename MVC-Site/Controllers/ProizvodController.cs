@@ -24,6 +24,10 @@ namespace MVC_Site.Controllers
             return View(repo.GetProizvod(id.Value));
         }
 
+        public JsonResult Potkategorije(int? id)
+        {
+            return id.HasValue ? Json(repo.GetMultiplePotkategorija(id.Value).Values, JsonRequestBehavior.AllowGet) : Json(repo.GetMultiplePotkategorija().Values, JsonRequestBehavior.AllowGet);
+        }
         // GET: Proizvod/Create
         public ActionResult Create()
         {

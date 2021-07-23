@@ -1,0 +1,49 @@
+﻿@model IEnumerable<AdventureWorksOBPRepo.Stavka>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDStavka)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kolicina)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CijenaPoKomadu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PopustUPostocima)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UkupnaCijena)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDStavka)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Kolicina)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CijenaPoKomadu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PopustUPostocima)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UkupnaCijena)
+        </td>
+        <td class="gap-1 actions">
+            @Html.ActionLink("Details", "StavkaDetails", new { id=item.IDStavka })
+        </td>
+    </tr>
+}
+
+</table>

@@ -69,16 +69,35 @@ namespace MVC_Site.Controllers
         }
 
         // GET: Kupac/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View(Models.RepoSingleton.GetInstance().GetKupac(id));
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return View(Models.RepoSingleton.GetInstance().GetKupac(id.Value));
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            Session["update-kupac"] = Models.RepoSingleton.GetInstance().GetKupac(id);
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            Session["update-kupac"] = Models.RepoSingleton.GetInstance().GetKupac(id.Value);
             return new RedirectResult("/Kupac/Update.aspx");
         }
+
+        public ActionResult RacunDetails(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return View(Models.RepoSingleton.GetInstance().GetRacun(id.Value));
+        }
+        public ActionResult StavkaDetails(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return View(Models.RepoSingleton.GetInstance().GetStavka(id.Value));
+        }
+
+        #region json
         public JsonResult Grad(int id)
         {
             return Json(Models.RepoSingleton.GetInstance().GetGrad(id), JsonRequestBehavior.AllowGet);
@@ -99,5 +118,6 @@ namespace MVC_Site.Controllers
         {
             return Json(Models.RepoSingleton.GetInstance().GetDrzava(id), JsonRequestBehavior.AllowGet);
         }
+        #endregion
     }
 }

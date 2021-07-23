@@ -1,0 +1,55 @@
+﻿@model AdventureWorksOBPRepo.Stavka
+
+@{
+    ViewBag.Title = "StavkaDetails";
+}
+
+<h2>Stavka</h2>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDStavka)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDStavka)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kolicina)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kolicina)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CijenaPoKomadu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CijenaPoKomadu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PopustUPostocima)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PopustUPostocima)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UkupnaCijena)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UkupnaCijena)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to Racun", "RacunDetails", new { id = Model.Racun.IDRacun })
+</p>

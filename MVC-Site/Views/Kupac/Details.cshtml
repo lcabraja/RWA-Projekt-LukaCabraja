@@ -10,8 +10,12 @@
     <h4>Customer</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDKupac)
+        </dt>
+
         <dd>
-            @Html.Display("IDKupac")
+            @Html.DisplayFor(model => model.IDKupac)
         </dd>
 
         <dt>
@@ -48,7 +52,10 @@
 
     </dl>
 </div>
+
+@Html.Partial("Racun", MVC_Site.Models.RepoSingleton.GetInstance().GetMultipleRacun(Model.IDKupac).Values)
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDKupac }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

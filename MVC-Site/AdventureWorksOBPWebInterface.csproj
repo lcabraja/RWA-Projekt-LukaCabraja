@@ -229,6 +229,10 @@
     <Content Include="Views\Proizvod\Edit.cshtml" />
     <Content Include="Views\Proizvod\Delete.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Kupac\Racun.cshtml" />
+    <Content Include="Views\Kupac\RacunDetails.cshtml" />
+    <Content Include="Views\Kupac\Stavka.cshtml" />
+    <Content Include="Views\Kupac\StavkaDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

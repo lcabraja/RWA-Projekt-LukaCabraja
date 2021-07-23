@@ -59,7 +59,7 @@ namespace AdventureWorksOBPRepo
         public bool recacheProizvod { get; set; } = false;
         public bool recacheRacun { get; set; } = false;
         public bool recacheStavka { get; set; } = false;
-        public bool recacheLoginData{ get; set; } = false;
+        public bool recacheLoginData { get; set; } = false;
         #endregion
         #endregion
 
@@ -403,8 +403,15 @@ namespace AdventureWorksOBPRepo
             }
             else
             {
-                kupac = GetKupacFromDataRow(
-                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Kupac", idKupac).Tables[0].Rows[0]);
+                try
+                {
+                    kupac = GetKupacFromDataRow(
+                        SqlHelper.ExecuteDataset(ConnectionString, "proc_select_Kupac", idKupac).Tables[0].Rows[0]);
+                }
+                catch
+                {
+                    return null;
+                }
                 Cache(kupac);
                 return kupac;
             }

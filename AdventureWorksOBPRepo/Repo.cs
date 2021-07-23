@@ -29,6 +29,7 @@ namespace AdventureWorksOBPRepo
             cacheProizvod = new SortedList<int, Proizvod>();
             cacheRacun = new SortedList<int, Racun>();
             cacheStavka = new SortedList<int, Stavka>();
+            cacheLoginData = new SortedList<int, LoginData>();
         }
 
         #region ---------------------------------------------------------------------------------------------------------------------Cache vars
@@ -45,6 +46,7 @@ namespace AdventureWorksOBPRepo
         private SortedList<int, Proizvod> cacheProizvod;
         private SortedList<int, Racun> cacheRacun;
         private SortedList<int, Stavka> cacheStavka;
+        private SortedList<int, LoginData> cacheLoginData;
         #endregion
         #region cache bools
         public bool recacheDrzava { get; set; } = false;
@@ -57,6 +59,7 @@ namespace AdventureWorksOBPRepo
         public bool recacheProizvod { get; set; } = false;
         public bool recacheRacun { get; set; } = false;
         public bool recacheStavka { get; set; } = false;
+        public bool recacheLoginData{ get; set; } = false;
         #endregion
         #endregion
 
@@ -845,6 +848,34 @@ namespace AdventureWorksOBPRepo
             };
         }
         #endregion
+        #region ---------------------------------------------------------------------------------------------------------------------Stavka
+        public LoginData GetLoginData(LoginData loginData)
+        {
+            if (loginData == null)
+                return null;
+            LoginData LoginData;
+            if (cacheLoginData.TryGetValue(loginData.IDLoginData, out LoginData))
+            {
+                return LoginData;
+            }
+            else
+            {
+                LoginData = GetLoginDataFromDataRow(
+                    SqlHelper.ExecuteDataset(ConnectionString, "proc_select_LoginData", loginData.Username).Tables[0].Rows[0]);
+                Cache(LoginData);
+                return LoginData;
+            }
+        }
+        private LoginData GetLoginDataFromDataRow(DataRow row)
+        {
+            return new LoginData
+            {
+                IDLoginData = (int)row["IDLoginData"],
+                Username = row["Username"].ToString(),
+                Password = row["Password"].ToString()
+            };
+        }
+        #endregion
         #region ---------------------------------------------------------------------------------------------------------------------Helper
         private uint MaxCount(uint currentCount)
         {
@@ -876,7 +907,8 @@ namespace AdventureWorksOBPRepo
             { typeof(Potkategorija), 7 },
             { typeof(Proizvod), 8 },
             { typeof(Racun), 9 },
-            { typeof(Stavka), 10 }
+            { typeof(Stavka), 10 },
+            { typeof(LoginData), 11 }
         };
         private void Cache(object item)
         {
@@ -907,6 +939,8 @@ namespace AdventureWorksOBPRepo
                     var Racun = item as Racun; cacheRacun[Racun.IDRacun] = Racun; break;
                 case 10:
                     var Stavka = item as Stavka; cacheStavka[Stavka.IDStavka] = Stavka; break;
+                case 11:
+                    var LoginData = item as LoginData; cacheLoginData[LoginData.IDLoginData] = LoginData; break;
                 default:
                     return;
 
@@ -924,6 +958,7 @@ namespace AdventureWorksOBPRepo
             recacheProizvod = true;
             recacheRacun = true;
             recacheStavka = true;
+            recacheLoginData = true;
 
             GetMultipleDrzava();
             GetMultipleGrad();

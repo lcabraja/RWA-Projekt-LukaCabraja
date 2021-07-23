@@ -58,3 +58,11 @@ textarea {
     text-align: right !important;
     margin: auto;
 }
+
+#formcontainer > .input-group {
+    margin-right: 0px;
+}
+
+    #formcontainer > .input-group > .form-control {
+        margin-right: 1px;
+    }

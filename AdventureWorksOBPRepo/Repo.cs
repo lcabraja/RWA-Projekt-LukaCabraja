@@ -11,8 +11,7 @@ namespace AdventureWorksOBPRepo
 {
     public class Repo
     {
-        public const int MAXTAKE = 50;
-
+        public const int MAXTAKE = 51;
         public string ConnectionString { get; private set; }
         public Repo(string connectionString)
         {

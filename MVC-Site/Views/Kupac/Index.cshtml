@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<AdventureWorksOBPRepo.Kupac>
 
-@{
-    ViewBag.Title = "Customers";
-}
+@{ ViewBag.Title = "Customers"; }
 
 <h2>Customers</h2>
 <div class="d-flex space-between">
@@ -51,36 +49,41 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDKupac)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prezime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefon)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grad.Naziv)
-            </td>
-            <td class="gap-1 actions">
-                @Html.ActionLink("Update", "Edit", new { id = item.IDKupac }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IDKupac })
-            </td>
-        </tr>
-    }
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IDKupac)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Ime)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Prezime)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Email)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Telefon)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Grad.Naziv)
+    </td>
+    <td class="gap-1 actions">
+        @Html.ActionLink("Update", "Edit", new { id = item.IDKupac }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IDKupac })
+    </td>
+</tr>}
 </table>
 <div class="d-flex space-between">
     <button id="pagedown" class="btn btn-default">Previous Page</button>
-    <div>
-
+    <div class="d-flex gap-1">
+        <select class="form-control" id="take">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="30" selected>30</option>
+            <option value="50">50</option>
+        </select>
         <button id="pageup" class="btn btn-default">Next Page</button>
     </div>
 </div>

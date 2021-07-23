@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<AdventureWorksOBPRepo.Proizvod>
 
-@{
-    ViewBag.Title = "Index";
-}
+@{ ViewBag.Title = "Index"; }
 
 <h2>Index</h2>
 
@@ -37,34 +35,53 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDProizvod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naziv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Potkategorija.Naziv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Boja)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BrojProizvoda)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinimalnaKolicinaNaSkladistu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CijenaBezPDV)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.IDProizvod }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IDProizvod }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IDProizvod })
-            </td>
-        </tr>
-    }
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IDProizvod)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Naziv)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Potkategorija.Naziv)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Boja)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BrojProizvoda)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.MinimalnaKolicinaNaSkladistu)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CijenaBezPDV)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.IDProizvod }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IDProizvod }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.IDProizvod })
+    </td>
+</tr>
+}
 
 </table>
+<div class="d-flex space-between">
+    <button id="pagedown" class="btn btn-default">Previous Page</button>
+    <div class="d-flex gap-1">
+        <select class="form-control" id="take">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15" selected>15</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+        </select>
+        <button id="pageup" class="btn btn-default">Next Page</button>
+    </div>
+</div>
+
+<i id="anchor" remaining="@ViewBag.remaining"></i>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Proizvod/Index.js")
+}

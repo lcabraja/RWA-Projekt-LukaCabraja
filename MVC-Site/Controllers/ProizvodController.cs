@@ -13,7 +13,28 @@ namespace MVC_Site.Controllers
         // GET: Proizvod
         public ActionResult Index()
         {
-            return View(repo.GetMultipleProizvod(50).Values);
+            IList<AdventureWorksOBPRepo.Proizvod> proizvodi;
+            int page;
+            int skip;
+            int take;
+
+            if (!int.TryParse(Request.QueryString.Get("take"), out take))
+            {
+                take = 15;
+            }
+            if (!int.TryParse(Request.QueryString.Get("page"), out page))
+            {
+                page = 0;
+            }
+            skip = take * page;
+
+            proizvodi = Models.RepoSingleton.GetInstance().GetMultipleProizvod((uint)take + 1, (uint)skip).Values;
+
+            ViewBag.remaining = proizvodi.Count;
+            if (proizvodi.Count > take)
+                return View(proizvodi.Take(proizvodi.Count - 1));
+            else
+                return View(proizvodi.Take(take));
         }
 
         // GET: Proizvod/Details/5

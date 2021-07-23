@@ -38,10 +38,10 @@ namespace MVC_Site
             Server.ClearError();
 
             string path = Request.Path;
-            Context.RewritePath(string.Format("~/Default.aspx", code), false);
+            Context.RewritePath("~/Default.aspx", false);
             IHttpHandler httpHandler = new MvcHttpHandler();
             httpHandler.ProcessRequest(Context);
-            Context.RewritePath(path, false);
+            Context.RewritePath("~/Default.aspx", false);
         }
     }
 }

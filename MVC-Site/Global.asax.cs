@@ -29,5 +29,19 @@ namespace MVC_Site
                 Response.Redirect("/Login");
             }
         }
+        void Application_Error(object sender, EventArgs e)
+        {
+            var error = Server.GetLastError();
+            var code = (error is HttpException) ? (error as HttpException).GetHttpCode() : 500;
+
+            Response.Clear();
+            Server.ClearError();
+
+            string path = Request.Path;
+            Context.RewritePath(string.Format("~/Default.aspx", code), false);
+            IHttpHandler httpHandler = new MvcHttpHandler();
+            httpHandler.ProcessRequest(Context);
+            Context.RewritePath(path, false);
+        }
     }
 }

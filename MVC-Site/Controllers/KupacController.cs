@@ -97,6 +97,12 @@ namespace MVC_Site.Controllers
             return View(Models.RepoSingleton.GetInstance().GetStavka(id.Value));
         }
 
+        public ActionResult ProizvodDetails(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Proizvod", new { id = id });
+        }
         #region json
         public JsonResult Grad(int id)
         {

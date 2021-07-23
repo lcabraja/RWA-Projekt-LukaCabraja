@@ -1,8 +1,6 @@
 ﻿@model AdventureWorksOBPRepo.Stavka
 
-@{
-    ViewBag.Title = "StavkaDetails";
-}
+@{ ViewBag.Title = "StavkaDetails"; }
 
 <h2>Stavka</h2>
 <hr />
@@ -47,6 +45,22 @@
 
         <dd>
             @Html.DisplayFor(model => model.UkupnaCijena)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Racun)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Racun.BrojRacuna, "RacunDetails", new { id = Model.Racun.IDRacun })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Proizvod)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Proizvod.Naziv, "ProizvodDetails", new { id = Model.Proizvod.IDProizvod })
         </dd>
     </dl>
 </div>

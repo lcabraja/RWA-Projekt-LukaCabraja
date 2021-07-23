@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<AdventureWorksOBPRepo.Racun>
 
+<h4>Racuni</h4>
 <table class="table">
     <tr>
         <th>
@@ -35,8 +36,8 @@
             @Html.DisplayFor(modelItem => item.DatumIzdavanja)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.BrojRacuna)
-        </td>
+            @Html.ActionLink(item.BrojRacuna, "RacunDetails", new { id = item.IDRacun })
+        </td    >
         <td>
             @Html.DisplayFor(modelItem => item.Komentar)
         </td>

@@ -41,6 +41,29 @@
             @Html.DisplayFor(model => model.Komentar)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Kupac)
+        </dt>
+
+        <dd>
+            @Html.ActionLink($"{Model.Kupac.Ime} {Model.Kupac.Prezime}", "Details", new { id = Model.Kupac.IDKupac })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Komercijalist)
+        </dt>
+
+        <dd>
+            @Model.Komercijalist.Ime @Model.Komercijalist.Prezime
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KreditnaKartica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(modelItem => Model.KreditnaKartica.Broj)
+        </dd>
     </dl>
 </div>
 

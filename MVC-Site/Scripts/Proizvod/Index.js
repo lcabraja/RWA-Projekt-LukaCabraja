@@ -98,7 +98,7 @@ document.getElementById("take").onchange = function () {
             console.log("location.replace");
             location.replace(updateUrlParameter(location.href, "take", this.value));
         } else {
-            newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "take=15";
+            newlocation = (location.href.includes("?") ? location.href + "&" : "?") + "take=" + this.value;
             console.log("newlocation");
             location.replace(newlocation);
         }

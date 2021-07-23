@@ -29,15 +29,16 @@ namespace MVC_Site.Controllers
             }
             skip = take * page;
 
-            if (!int.TryParse(Request.QueryString.Get("grad"), out grad))
+            if (!int.TryParse(Request.QueryString.Get("grad"), out grad) || grad <= 0)
             {
                 kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac((uint)take + 1, (uint)skip, order).Values;
-
             }
             else
             {
                 kupci = Models.RepoSingleton.GetInstance().GetMultipleKupac(grad, (uint)take + 1, (uint)skip, order).Values;
             }
+
+            Session["kupci-search"] = new { @grad = grad, @page = page, @take = take };
 
             ViewBag.remaining = kupci.Count;
             if (kupci.Count > take)

@@ -77,7 +77,7 @@ namespace AdventureWorksOBPRepo
         #region ---------------------------------------------------------------------------------------------------------------------Drzava
         public Drzava GetDrzava(int IDDrzava)
         {
-            if (IDDrzava == 0)
+            if (IDDrzava <= 0)
                 return null;
             Drzava Drzava;
             if (cacheDrzava.TryGetValue(IDDrzava, out Drzava))
@@ -94,7 +94,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Drzava> GetMultipleDrzava()
         {
-            if (cacheDrzava.Count == 0 || !recacheDrzava)
+            if (cacheDrzava.Count <= 0 || !recacheDrzava)
             {
                 SortedList<int, Drzava> collection = new SortedList<int, Drzava>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Drzava");
@@ -120,7 +120,7 @@ namespace AdventureWorksOBPRepo
         #region ---------------------------------------------------------------------------------------------------------------------Grad
         public Grad GetGrad(int IDGrad)
         {
-            if (IDGrad == 0)
+            if (IDGrad <= 0)
                 return null;
             Grad Grad;
             if (cacheGrad.TryGetValue(IDGrad, out Grad))
@@ -137,7 +137,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Grad> GetMultipleGrad()
         {
-            if (cacheGrad.Count == 0 || !recacheGrad)
+            if (cacheGrad.Count <= 0 || !recacheGrad)
             {
                 SortedList<int, Grad> collection = new SortedList<int, Grad>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad");
@@ -153,7 +153,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Grad> GetMultipleGrad(int drzavaID)
         {
-            if (cacheGrad.Count == 0 || !recacheGrad)
+            if (cacheGrad.Count <= 0 || !recacheGrad)
             {
                 SortedList<int, Grad> collection = new SortedList<int, Grad>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Grad_targeted", drzavaID);
@@ -195,7 +195,7 @@ namespace AdventureWorksOBPRepo
         }
         public Kategorija GetKategorija(int IDKategorija)
         {
-            if (IDKategorija == 0)
+            if (IDKategorija <= 0)
                 return null;
             Kategorija Kategorija;
             if (cacheKategorija.TryGetValue(IDKategorija, out Kategorija))
@@ -212,7 +212,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Kategorija> GetMultipleKategorija()
         {
-            if (cacheKategorija.Count == 0 || !recacheKategorija)
+            if (cacheKategorija.Count <= 0 || !recacheKategorija)
             {
                 SortedList<int, Kategorija> collection = new SortedList<int, Kategorija>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Kategorija");
@@ -259,7 +259,7 @@ namespace AdventureWorksOBPRepo
         #region ---------------------------------------------------------------------------------------------------------------------Komercijalist
         public Komercijalist GetKomercijalist(int idKomercijalist)
         {
-            if (idKomercijalist == 0)
+            if (idKomercijalist <= 0)
                 return null;
             Komercijalist Komercijalist;
             if (cacheKomercijalist.TryGetValue(idKomercijalist, out Komercijalist))
@@ -276,7 +276,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Komercijalist> GetMultipleKomercijalist()
         {
-            if (cacheKomercijalist.Count == 0 || !recacheKomercijalist)
+            if (cacheKomercijalist.Count <= 0 || !recacheKomercijalist)
             {
                 SortedList<int, Komercijalist> collection = new SortedList<int, Komercijalist>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Komercijalist");
@@ -331,7 +331,7 @@ namespace AdventureWorksOBPRepo
         }
         public KreditnaKartica GetKreditnaKartica(int idKreditnaKartica)
         {
-            if (idKreditnaKartica == 0)
+            if (idKreditnaKartica <= 0)
                 return null;
             KreditnaKartica kartica;
             if (cacheKreditnaKartica.TryGetValue(idKreditnaKartica, out kartica))
@@ -348,7 +348,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, KreditnaKartica> GetMultipleKreditnaKartica()
         {
-            if (cacheKreditnaKartica.Count == 0 || !recacheKreditnaKartica)
+            if (cacheKreditnaKartica.Count <= 0 || !recacheKreditnaKartica)
             {
                 SortedList<int, KreditnaKartica> collection = new SortedList<int, KreditnaKartica>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_KreditnaKartica");
@@ -394,7 +394,7 @@ namespace AdventureWorksOBPRepo
         #region ---------------------------------------------------------------------------------------------------------------------Kupac
         public Kupac GetKupac(int idKupac)
         {
-            if (idKupac == 0)
+            if (idKupac <= 0)
                 return null;
             Kupac kupac;
             if (cacheKupac.TryGetValue(idKupac, out kupac))
@@ -412,7 +412,7 @@ namespace AdventureWorksOBPRepo
         public SortedList<int, Kupac> GetMultipleKupac(uint take, uint skip = 0, KupacOrderBy order = KupacOrderBy.IDKupacAsc)
         {
             take = MaxCount(take);
-            if (order != KupacOrderBy.IDKupacAsc || cacheKupac.Count == 0 || !recacheKupac)
+            if (order != KupacOrderBy.IDKupacAsc || cacheKupac.Count <= 0 || !recacheKupac)
             {
                 SortedList<int, Kupac> collection = new SortedList<int, Kupac>();
                 Debug.WriteLine(order);
@@ -495,7 +495,7 @@ namespace AdventureWorksOBPRepo
         }
         public Potkategorija GetPotkategorija(int IDPotkategorija)
         {
-            if (IDPotkategorija == 0)
+            if (IDPotkategorija <= 0)
                 return null;
             Potkategorija Potkategorija;
             if (cachePotkategorija.TryGetValue(IDPotkategorija, out Potkategorija))
@@ -512,7 +512,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Potkategorija> GetMultiplePotkategorija()
         {
-            if (cachePotkategorija.Count == 0 || !recachePotkategorija)
+            if (cachePotkategorija.Count <= 0 || !recachePotkategorija)
             {
                 SortedList<int, Potkategorija> collection = new SortedList<int, Potkategorija>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Potkategorija");
@@ -528,7 +528,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Potkategorija> GetMultiplePotkategorija(int kategorijaID)
         {
-            if (cachePotkategorija.Count == 0 || !recachePotkategorija)
+            if (cachePotkategorija.Count <= 0 || !recachePotkategorija)
             {
                 SortedList<int, Potkategorija> collection = new SortedList<int, Potkategorija>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Potkategorija_targeted", kategorijaID);
@@ -599,7 +599,7 @@ namespace AdventureWorksOBPRepo
         }
         public Proizvod GetProizvod(int IDProizvod)
         {
-            if (IDProizvod == 0)
+            if (IDProizvod <= 0)
                 return null;
             Proizvod Proizvod;
             if (cacheProizvod.TryGetValue(IDProizvod, out Proizvod))
@@ -616,7 +616,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Proizvod> GetMultipleProizvod(uint count, uint skip = 0)
         {
-            if (cacheProizvod.Count == 0 || !recacheProizvod)
+            if (cacheProizvod.Count <= 0 || !recacheProizvod)
             {
                 SortedList<int, Proizvod> collection = new SortedList<int, Proizvod>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Proizvod", (int)skip, (int)count);
@@ -715,7 +715,7 @@ namespace AdventureWorksOBPRepo
         #region---------------------------------------------------------------------------------------------------------------------Racun
         public Racun GetRacun(int idRacun)
         {
-            if (idRacun == 0)
+            if (idRacun <= 0)
                 return null;
             Racun Racun;
             if (cacheRacun.TryGetValue(idRacun, out Racun))
@@ -732,7 +732,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Racun> GetMultipleRacun()
         {
-            if (cacheRacun.Count == 0 || !recacheRacun)
+            if (cacheRacun.Count <= 0 || !recacheRacun)
             {
                 SortedList<int, Racun> collection = new SortedList<int, Racun>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Racun");
@@ -748,7 +748,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Racun> GetMultipleRacun(int kupacID)
         {
-            if (cacheRacun.Count == 0 || !recacheRacun)
+            if (cacheRacun.Count <= 0 || !recacheRacun)
             {
                 SortedList<int, Racun> collection = new SortedList<int, Racun>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Racun_targeted", kupacID);
@@ -784,7 +784,7 @@ namespace AdventureWorksOBPRepo
         #region ---------------------------------------------------------------------------------------------------------------------Stavka
         public Stavka GetStavka(int idStavka)
         {
-            if (idStavka == 0)
+            if (idStavka <= 0)
                 return null;
             Stavka Stavka;
             if (cacheStavka.TryGetValue(idStavka, out Stavka))
@@ -801,7 +801,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Stavka> GetMultipleStavka()
         {
-            if (cacheStavka.Count == 0 || !recacheStavka)
+            if (cacheStavka.Count <= 0 || !recacheStavka)
             {
                 SortedList<int, Stavka> collection = new SortedList<int, Stavka>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Stavka");
@@ -817,7 +817,7 @@ namespace AdventureWorksOBPRepo
         }
         public SortedList<int, Stavka> GetMultipleStavka(int idRacun)
         {
-            if (cacheStavka.Count == 0 || !recacheStavka)
+            if (cacheStavka.Count <= 0 || !recacheStavka)
             {
                 SortedList<int, Stavka> collection = new SortedList<int, Stavka>();
                 DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, "proc_select_multiple_Stavka_targeted", idRacun);

@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<AdventureWorksOBPRepo.Racun>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -16,6 +13,15 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Komentar)
+        </th>
+        <th>
+            @Html.DisplayName("Kupac")
+        </th>
+        <th>
+            @Html.DisplayName("Komercijalist")
+        </th>
+        <th>
+            @Html.DisplayName("Kreditna Kartica")
         </th>
         <th></th>
     </tr>
@@ -33,6 +39,15 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Komentar)
+        </td>
+        <td>
+            @Html.ActionLink($"{item.Kupac.Ime} {item.Kupac.Prezime}", "Details", new { id = item.Kupac.IDKupac })
+        </td>
+        <td>
+            @item.Komercijalist.Ime @item.Komercijalist.Prezime
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.KreditnaKartica.Broj)
         </td>
         <td class="gap-1 actions">
             @Html.ActionLink("Details", "RacunDetails", new { id=item.IDRacun })

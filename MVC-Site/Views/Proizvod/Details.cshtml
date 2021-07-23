@@ -50,6 +50,29 @@
             @Html.DisplayFor(model => model.CijenaBezPDV)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Boja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Boja)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Potkategorija)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Potkategorija.Naziv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Potkategorija.Kategorija)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Potkategorija.Kategorija.Naziv)
+        </dd>
     </dl>
 </div>
 <p>

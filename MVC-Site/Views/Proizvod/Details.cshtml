@@ -1,8 +1,6 @@
 ﻿@model AdventureWorksOBPRepo.Proizvod
 
-@{
-    ViewBag.Title = "Details";
-}
+@{ ViewBag.Title = "Details"; }
 
 <h2>Details</h2>
 
@@ -57,25 +55,31 @@
         <dd>
             @Html.DisplayFor(model => model.Boja)
         </dd>
-        
+
         <dt>
-            @Html.DisplayNameFor(model => model.Potkategorija)
+            Potkategorija
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Potkategorija.Naziv)
+            @if (Model.Potkategorija != null)
+            {
+                @Html.ActionLink(Model.Potkategorija.Naziv, "PotkategorijaDetails", new { id = Model.Potkategorija.IDPotkategorija })
+            }
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Potkategorija.Kategorija)
+            Kategorija
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Potkategorija.Kategorija.Naziv)
+            @if (Model.Potkategorija != null)
+            {
+                @Html.ActionLink(Model.Potkategorija.Kategorija.Naziv, "KategorijaDetails", new { id = Model.Potkategorija.Kategorija.IDKategorija })
+            }
         </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDProizvod }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

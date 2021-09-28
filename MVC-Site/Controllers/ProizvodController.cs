@@ -192,5 +192,19 @@ namespace MVC_Site.Controllers
                 return View(repo.GetProizvod(id));
             }
         }
+
+        public ActionResult KategorijaDetails(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Kategorija", new { id = id });
+        }
+
+        public ActionResult PotkategorijaDetails(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Potkategorija", new { id = id });
+        }
     }
 }

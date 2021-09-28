@@ -43,7 +43,10 @@
         @Html.DisplayFor(modelItem => item.Naziv)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.Potkategorija.Naziv)
+        @if (item.Potkategorija != null)
+        {
+                @Html.ActionLink(item.Potkategorija.Naziv, "PotkategorijaDetails", new { id = item.Potkategorija.IDPotkategorija })
+        }
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.Boja)

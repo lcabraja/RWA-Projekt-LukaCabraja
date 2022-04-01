@@ -1,4 +1,4 @@
-# Development of web applications <br> Razvoj web aplikacija
+# Razvoj web aplikacija <br> Development of web applications
 4th Semester @ [Algebra University College](https://www.algebra.hr/visoko-uciliste/en/)
 
 A .NET Web Forms and MVC project that demonstrates database CRUD operations
